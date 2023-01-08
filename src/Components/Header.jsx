@@ -1,9 +1,14 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../index.css';
+import Nav from '../Pages/Nav';
 
 
 
-export default function Header() {
+export default function Header(selected) {
+
+    
+
   return (
     <div className=' bg-white border-b shadow-sm'>
         <header className='flex justify-between px-3 py-5 items-center max-w-6xl mx-auto sticky top-0'>
@@ -13,11 +18,19 @@ export default function Header() {
                 alt='logo'/>
             </div>
 
-            <div>
+            <div className='Nav' >
                 <ul className='flex space-x-10'>
-                    <li className='text-lg font-bold'>Home</li>
-                    <li className='text-lg font-bold'>Offers</li>
-                    <li className='text-lg font-bold'>SignIn</li>
+                    <Link to={'/'}>
+                       <Nav selected title='Home' />
+
+                    </Link>
+                    <Link to={'/offers'}>
+                       <Nav  title='Offers' />
+                    </Link>
+                    <Link to={'/sign-in'}>
+                       <Nav  title='SignIn'/>
+                    </Link>
+                   
                 </ul>
             </div>
         </header>

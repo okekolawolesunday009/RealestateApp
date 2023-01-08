@@ -5,3 +5,12 @@
 body{
     background-color: rgb(240, 253, 244);
 }
+.selected{
+    border-bottom: 4px solid red;
+}
+@media screen and (max-width:768px) {
+    .Nav{
+      display:none
+    }
+    
+}
