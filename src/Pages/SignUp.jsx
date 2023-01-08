@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import OAUTH from '../Components/OAUTH'
 
 export default function SignIn() {
   return (
@@ -24,14 +26,31 @@ export default function SignIn() {
                     {/* <label htmlFor="" className='font-bold'>Password</label> */}
                     <input className='text-xl w-full h-11 rounded-xl px-3 border' type="password" placeholder='Password' name="" id="" />
                     </div>
+
+                    <div className='flex flex-wrap justify-between '>
+                        <div className=''>
+                            Have an account? 
+                            <Link to={'/sign-in'}>
+                               <span className='text-red-600 hover:text-red-700 transition ease-in-out'> Sign In</span>
+
+                            </Link>
+                        </div>
+                        <div className='text-blue-600 font-bold hover:text-blue-700 transition ease-in-out'>
+                          
+                            <Link to={'/forgot-password'}>
+                                Forgot password?
+
+                            </Link>
+                        
+                       </div>
+                      </div>
                    
                     <input className='w-full h-11 bg-blue-600 text-white text-xl font-semibold  rounded-md' type="submit" value="SIGN UP" name="" id="" />
+                   
                     <div className='font-semibold text-center'>
                         OR
                     </div>
-                    <div className='font-semibold'>
-                        Continue with Google
-                    </div>
+                   <OAUTH/>
                     
                 </form>
             </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {AiFillEye, AiFillEyeInvisible} from 'react-icons/ai'
+import OAUTH from '../Components/OAUTH';
 
 
 export default function SignIn() {
@@ -55,14 +56,14 @@ export default function SignIn() {
 
                     </div>
                     <div className='flex flex-wrap justify-between '>
-                        <div className='w-full'>
+                        <div className=''>
                             Don't have an account? 
                             <Link to={'/sign-up'}>
-                               <span className='text-red-600'> Register</span>
+                               <span className='text-red-600 hover:text-red-700 transition ease-in-out'> Register</span>
 
                             </Link>
                         </div>
-                        <div className='text-blue-600 font-boldw-full'>
+                        <div className='text-blue-600 font-bold hover:text-blue-700 transition ease-in-out'>
                           
                             <Link to={'/forgot-password'}>
                                 Forgot password?
@@ -71,13 +72,12 @@ export default function SignIn() {
                         
                        </div>
                     </div>
-                    <input className='w-full h-11 bg-blue-600 text-white text-xl font-semibold  rounded-md' type="submit" value="SIGN IN" name="" id="" />
-                    <div className='font-semibold text-center'>
-                        OR
+                    <input className='w-full h-11 bg-blue-600 text-white text-sm font-semibold  rounded-md hover:bg-blue-700 active:bg-blue-800 transition duration-150 ease-in-out ' type="submit" value="SIGN IN" name="" id="" />
+                    <div className='flex items-center before:border-t before:flex-1 before:border-gray-300 after:border-t after:flex-1 after:border-gray-300 '>
+                        <p className='font-semibold text-center'>OR</p>
                     </div>
-                    <div className='font-semibold'>
-                        Continue with Google
-                    </div>
+                    <OAUTH/>
+                    
                     
                 </form>
             </div>
