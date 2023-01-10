@@ -1,8 +1,44 @@
-import React from 'react'
+import {React, useState} from 'react'
 import { Link } from 'react-router-dom'
 import OAUTH from '../Components/OAUTH'
+import {AiFillEye, AiFillEyeInvisible} from 'react-icons/ai'
+import { getAuth, createUserWithEmailAndPassword} from "firebase/auth";
 
-export default function SignIn() {
+// import { db } from '../firebase';
+
+export default function SignUp() {
+
+    const [showPassword, setShowPassword]= useState(false);
+    const [formData , setFormData ] = useState({
+        fname: "",
+        email:"",
+        password:""
+    })
+    const {email, password, fname} = formData;
+
+    function handleChange(e){
+        setFormData((prevState)=>({
+            ...prevState,
+            [e.target.id] : e.target.value
+        })) 
+    }
+
+    async function onSubmit(e){
+        e.preventDefault()
+        try {
+                const auth = getAuth();
+                const userCredential = await createUserWithEmailAndPassword(auth,email, password)
+
+                const user = userCredential.user
+                console.log(user)
+            
+        } catch (error) {
+            console.log(error)
+            
+        }
+
+
+    }
   return (
     <section>
         <h1 className='text-4xl text-center mt-6 font-bold'>Sign Up</h1>
@@ -12,19 +48,44 @@ export default function SignIn() {
                 className='w-full rounded-2xl'/>
             </div>
             <div className=' w-full md:mt-20 md:w-[67%] lg:w-[40%] lg:ml-20 '>
-                <form action="" className='space-y-5'>
+                <form action="" className='space-y-5' onSubmit={onSubmit}>
                     <div>
                     {/* <label htmlFor="" className='font-bold'>Email</label> */}
-                    <input className='text-xl w-full h-11 rounded-xl px-3 border' type="text" placeholder='Full Name' name="" id="" />
+                    <input type="text"
+                    className='text-xl text-gray-700 w-full h-11 rounded-xl px-4 py-2  border-gray-300 transition ease-in-out'
+                    placeholder='Full Name'
+                    value={fname}
+                    onChange={handleChange} name="fname" id="fname" />
                     </div>
                   
                     <div>
                     {/* <label htmlFor="" className='font-bold'>Email</label> */}
-                    <input className='text-xl w-full h-11 rounded-xl px-3 border' type="email" placeholder='Email' name="" id="" />
-                    </div>
-                    <div>
-                    {/* <label htmlFor="" className='font-bold'>Password</label> */}
-                    <input className='text-xl w-full h-11 rounded-xl px-3 border' type="password" placeholder='Password' name="" id="" />
+                    <input
+                     className='text-xl text-gray-700 w-full h-11 rounded-xl px-4 py-2  border-gray-300 transition ease-in-out'
+                     value={email}
+                     onChange={handleChange}
+                      type="email"
+                       placeholder='Email' 
+                       name="email"
+                        id="email" />            
+                  </div>
+                    <div className='relative'>
+                        {/* <label htmlFor="" className='font-bold'>Password</label> */}
+
+                        <input 
+                        className='text-xl text-gray-700 w-full h-11 rounded-xl px-4 py-2  border-gray-300 transition ease-in-out'
+                        value={password}
+                        onChange={handleChange}
+                        type={showPassword ? "text" : "password" }
+                        placeholder='Password'
+                        name="password" id="password" />
+
+                        {showPassword ?
+                         (<AiFillEyeInvisible className='absolute right-3 top-3 text-xl cursor-pointer'
+                          onClick={()=> setShowPassword((prevState) =>!prevState)}/>) : (<AiFillEye className='absolute right-3 top-3 text-xl cursor-pointer'
+                          onClick={()=> setShowPassword((prevState) =>!prevState)}/>)
+                          }
+
                     </div>
 
                     <div className='flex flex-wrap justify-between '>

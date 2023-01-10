@@ -52,7 +52,8 @@ export default function SignIn() {
                         {showPassword ?
                          (<AiFillEyeInvisible className='absolute right-3 top-3 text-xl cursor-pointer'
                           onClick={()=> setShowPassword((prevState) =>!prevState)}/>) : (<AiFillEye className='absolute right-3 top-3 text-xl cursor-pointer'
-                          onClick={()=> setShowPassword((prevState) =>!prevState)}/>)}
+                          onClick={()=> setShowPassword((prevState) =>!prevState)}/>)
+                          }
 
                     </div>
                     <div className='flex flex-wrap justify-between '>
