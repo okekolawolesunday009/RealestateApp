@@ -2,9 +2,8 @@ import {React, useState} from 'react'
 import { Link } from 'react-router-dom'
 import OAUTH from '../Components/OAUTH'
 import {AiFillEye, AiFillEyeInvisible} from 'react-icons/ai'
-import { getAuth, createUserWithEmailAndPassword} from "firebase/auth";
-
-// import { db } from '../firebase';
+import { getAuth, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
+import {db} from '../firebase'
 
 export default function SignUp() {
 
@@ -28,7 +27,9 @@ export default function SignUp() {
         try {
                 const auth = getAuth();
                 const userCredential = await createUserWithEmailAndPassword(auth,email, password)
-
+                updateProfile(auth.currentUser, {
+                    displayName: fname
+                })
                 const user = userCredential.user
                 console.log(user)
             
