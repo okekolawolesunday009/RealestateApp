@@ -20,7 +20,7 @@ export default function OAUTH() {
       const provider = new GoogleAuthProvider()
       const result = await signInWithPopup(auth, provider)
       const user = result.user
-      console.log(user)
+      // console.log(user)
 
       //check for the error
 

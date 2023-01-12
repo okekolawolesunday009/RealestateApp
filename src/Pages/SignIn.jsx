@@ -2,7 +2,11 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {AiFillEye, AiFillEyeInvisible} from 'react-icons/ai'
 import OAUTH from '../Components/OAUTH';
-
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { async } from '@firebase/util';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import {db} from '../firebase'
 
 export default function SignIn() {
     const [showPassword, setShowPassword]= useState(false);
@@ -10,12 +14,26 @@ export default function SignIn() {
         email:"",
         password:""
     })
+    const navigate = useNavigate()
     const {email, password} = formData;
     function handleChange(e){
         setFormData((prevState)=>({
             ...prevState,
             [e.target.id] : e.target.value
         }))
+    }
+    async function handleSubmit (e){
+        e.preventDefault()
+        try {
+            const auth = getAuth();
+            const userCredential = await signInWithEmailAndPassword (auth,email, password)
+           if(userCredential.user){
+              navigate("/")
+           }
+            
+        } catch (error) {
+            toast.error('Bad Creditation')
+        }
     }
 
   return (
@@ -27,7 +45,7 @@ export default function SignIn() {
                 className='w-full rounded-2xl'/>
             </div>
             <div className=' w-full md:mt-20 md:w-[67%] lg:w-[40%] lg:ml-20 '>
-                <form action="" className='space-y-5'>
+                <form action="" onSubmit={handleSubmit} className='space-y-5'>
                     <div>
                     {/* <label htmlFor="" className='font-bold'>Email</label> */}
                     <input
