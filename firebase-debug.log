@@ -1,41 +1,17 @@
-[debug] [2023-01-08T16:53:24.828Z] ----------------------------------------------------------------------
-[debug] [2023-01-08T16:53:24.833Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\PC\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
-[debug] [2023-01-08T16:53:24.835Z] CLI Version:   11.20.0
-[debug] [2023-01-08T16:53:24.835Z] Platform:      win32
-[debug] [2023-01-08T16:53:24.836Z] Node Version:  v18.12.1
-[debug] [2023-01-08T16:53:24.838Z] Time:          Sun Jan 08 2023 17:53:24 GMT+0100 (GMT+01:00)
-[debug] [2023-01-08T16:53:24.838Z] ----------------------------------------------------------------------
+[debug] [2023-01-12T13:08:55.900Z] ----------------------------------------------------------------------
+[debug] [2023-01-12T13:08:55.907Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\PC\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-01-12T13:08:55.909Z] CLI Version:   11.20.0
+[debug] [2023-01-12T13:08:55.910Z] Platform:      win32
+[debug] [2023-01-12T13:08:55.911Z] Node Version:  v18.12.1
+[debug] [2023-01-12T13:08:55.913Z] Time:          Thu Jan 12 2023 14:08:55 GMT+0100 (GMT+01:00)
+[debug] [2023-01-12T13:08:55.914Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2023-01-08T16:53:25.043Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2023-01-08T16:53:25.044Z] > authorizing via signed-in user (okekolawoles36@gmail.com)
-[info] 
-     ######## #### ########  ######## ########     ###     ######  ########
-     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
-     ######    ##  ########  ######   ########  #########  ######  ######
-     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
-     ##       #### ##     ## ######## ########  ##     ##  ######  ########
-
-You're about to initialize a Firebase project in this directory:
-
-  C:\Users\PC\realestate-app
-
-Before we get started, keep in mind:
-
-  * You are initializing within an existing Firebase project directory
-
-[info] 
-=== Project Setup
-[info] 
-[info] First, let's associate this project directory with a Firebase project.
-[info] You can create multiple project aliases by running firebase use --add, 
-[info] but for now we'll just set up a default project.
-[info] 
-[debug] [2023-01-08T16:53:31.041Z] Using project from CLI flag: realestate-react-d496c
-[debug] [2023-01-08T16:53:31.047Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/realestate-react-d496c [none]
-[debug] [2023-01-08T16:53:31.144Z] Failed to make request to https://firebase.googleapis.com/v1beta1/projects/realestate-react-d496c
-[debug] [2023-01-08T16:53:36.166Z] Error: Timed out.
-    at Timeout._onTimeout (C:\Users\PC\AppData\Roaming\npm\node_modules\firebase-tools\lib\utils.js:253:49)
-    at listOnTimeout (node:internal/timers:564:17)
-    at process.processTimers (node:internal/timers:507:7)
-[error] 
-[error] Error: An unexpected error has occurred.
+[debug] [2023-01-12T13:08:56.298Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-01-12T13:08:56.301Z] > authorizing via signed-in user (okekolawoles36@gmail.com)
+[debug] [2023-01-12T13:08:56.302Z] [iam] checking project realestate-react-d496c for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-01-12T13:08:56.310Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/realestate-react-d496c:testIamPermissions [none]
+[debug] [2023-01-12T13:08:56.311Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/realestate-react-d496c:testIamPermissions x-goog-quota-user=projects/realestate-react-d496c
+[debug] [2023-01-12T13:08:56.312Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/realestate-react-d496c:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-01-12T13:08:57.204Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/realestate-react-d496c:testIamPermissions 200
+[debug] [2023-01-12T13:08:57.205Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/realestate-react-d496c:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-01-12T13:08:57.209Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/realestate-react-d496c [none]

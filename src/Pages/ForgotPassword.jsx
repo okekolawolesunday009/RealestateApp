@@ -1,8 +1,27 @@
-import React from 'react'
+import { getAuth, sendPasswordResetEmail } from 'firebase/auth'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import OAUTH from '../Components/OAUTH'
 
 export default function SignIn() {
+    const [email, setEmail] = useState("")
+
+    function handleChange(e){
+        setEmail(e.target.value)
+    }
+    async function handleSubmit(e){
+        e.preventDefault()
+        try {
+            const auth = getAuth;
+            await sendPasswordResetEmail(auth, email)
+            toast.success("Email recovery was sent")
+            
+        } catch (error) {
+            toast.error('Could not send Reset password')
+            
+        }
+    }
   return (
     <section>
         <h1 className='text-4xl text-center mt-6 font-bold'>Sign In</h1>
@@ -12,10 +31,12 @@ export default function SignIn() {
                 className='w-full rounded-2xl'/>
             </div>
             <div className=' w-full md:mt-20 md:w-[67%] lg:w-[40%] lg:ml-20 '>
-                <form action="" className='space-y-5'>
+                <form action="" onSubmit={handleSubmit} className='space-y-5'>
                     <div>
                         {/* <label htmlFor="" className='font-bold'>Email</label> */}
-                        <input className='text-xl w-full h-11 rounded-xl px-3 border' type="email" placeholder='Email' name="" id="" />
+                        <input
+                        value={email}
+                        onChange={handleChange} className='text-xl w-full h-11 rounded-xl px-3 border' type="email" placeholder='Email' name="" id="" />
                     </div>
                     <div className='flex flex-wrap justify-between '>
                         <div className=''>
