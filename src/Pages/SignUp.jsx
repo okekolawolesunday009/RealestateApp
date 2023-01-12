@@ -4,7 +4,9 @@ import OAUTH from '../Components/OAUTH'
 import {AiFillEye, AiFillEyeInvisible} from 'react-icons/ai'
 import { getAuth, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import {db} from '../firebase'
-
+import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 export default function SignUp() {
 
     const [showPassword, setShowPassword]= useState(false);
@@ -14,14 +16,14 @@ export default function SignUp() {
         password:""
     })
     const {email, password, fname} = formData;
-
+    const navigate = useNavigate()
     function handleChange(e){
         setFormData((prevState)=>({
             ...prevState,
             [e.target.id] : e.target.value
         })) 
     }
-
+//getting it from firebase auth doc
     async function onSubmit(e){
         e.preventDefault()
         try {
@@ -30,11 +32,26 @@ export default function SignUp() {
                 updateProfile(auth.currentUser, {
                     displayName: fname
                 })
-                const user = userCredential.user
-                console.log(user)
+                const user = userCredential.user;
+
+                //trying to remove password
+                const formDataCopy ={...formData }
+                delete formDataCopy.password;
+                //generates time
+                formDataCopy.timestamp = serverTimestamp();
+                //saving to database
+                //uid gets the user id of the form in firbase console
+                //users is the name of the new collection in the db in db
+                await setDoc(doc(db, 'users', user.uid), formDataCopy);
+                navigate("/");
+                // console.log(user)
+                toast.success('registration successful')
+
+                //after sign up use usenavigate hook to redirect to homepag
             
         } catch (error) {
-            console.log(error)
+            toast.error("Something went wrong with the registration")
+            // console.log(error)
             
         }
 
