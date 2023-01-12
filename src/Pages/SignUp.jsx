@@ -45,11 +45,12 @@ export default function SignUp() {
                 await setDoc(doc(db, 'users', user.uid), formDataCopy);
                 navigate("/");
                 // console.log(user)
-                toast.success('registration successful')
+                // toast.success('registration successful')
 
                 //after sign up use usenavigate hook to redirect to homepag
             
         } catch (error) {
+    
             toast.error("Something went wrong with the registration")
             // console.log(error)
             
