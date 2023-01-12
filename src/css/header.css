@@ -1,0 +1,36 @@
+.logo{
+    height: 1.75rem;
+}
+.threebar{
+    display: none;
+}
+@media screen and (max-width:768px){
+    .threebar{
+        display: block;
+    }
+    .logo{
+        height: 1.0rem;
+    }
+    .Nav{
+        position: absolute;
+        right: 10px;
+        top: 50px;
+        /* background-color: blue; */
+    }
+    .option{ 
+        display: none;
+        /* position: absolute; */
+     
+        text-align: center;
+        flex-direction: column;
+    }
+    .options__open{
+        /* display: block; */
+       display: block;
+    }
+
+    ul{
+        font-size: 0.75rem;
+    }
+    
+}

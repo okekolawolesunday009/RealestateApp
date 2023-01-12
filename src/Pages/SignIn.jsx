@@ -52,9 +52,9 @@ export default function SignIn() {
                      className='text-xl text-gray-700 w-full h-11 rounded-xl px-4 py-2  border-gray-300 transition ease-in-out'
                      value={email}
                      onChange={handleChange}
-                      type="email"
-                       placeholder='Email' 
-                       name="email" id="email" />
+                     type="email"
+                     placeholder='Email' 
+                     name="email" id="email" />
                     </div>
                     <div className='relative'>
                         {/* <label htmlFor="" className='font-bold'>Password</label> */}
