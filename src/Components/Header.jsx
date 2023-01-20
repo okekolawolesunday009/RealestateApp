@@ -47,9 +47,12 @@ export default function Header(selected) {
                     <Link to={'/offers'}>
                        <Nav  title='Offers' />
                     </Link>
-                    <Link to={'/sign-in'}>
-                       <Nav  title='SignIn'/>
-                    </Link>
+                    <li className={`${pathMathRoute("/sign-in") || pathMathRoute("/profile")}`}>
+                        <Nav  title='SignIn'/>
+
+                    </li>
+                       
+               
                    
                    
                 </ul>

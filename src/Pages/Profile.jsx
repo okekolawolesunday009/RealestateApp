@@ -1,18 +1,45 @@
-import { getAuth } from 'firebase/auth'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import {doc } from 'firebase/firestore';
+import { getAuth, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
+import { toast } from 'react-toastify';
 
 export default function Profile() {
-  const auth = getAuth();
+ 
   const [changeProfileName, setChangeProfileName] = useState(false);
+  const auth = getAuth();
+  async function submit(){
+    try {
+      if(auth.currentUser.displayName !== name){
+           
+            const userCredential = await createUserWithEmailAndPassword(auth);
+           await  updateProfile(auth.currentUser, {
+            displayName: name
+        });
+    //  const user = userCredential.user;
+    const docRef = doc(db, 'users', auth.currentUser.uid)
+      await updateProfile(docRef, {
+        name 
+      })
+    toast.success('profile details updated')
+     }
+
+    } catch (error) {
+      toast.error("Could not update profile")
+      
+    }
+   
+  
+  }
   
   function handleChange(){
     setChangeProfileName((prevState) => !prevState)
     console.log("clicked")
+    changeProfileName && submit()
   }
   function handleChangeName(e){
     e.preventDefault();
-    setForm((prevState)=>({
+    setFormData((prevState)=>({
       ...prevState,
       [e.target.id] : e.target.value
   }))
@@ -20,19 +47,18 @@ export default function Profile() {
 
   }
   const navigate = useNavigate()
-  const [form, setForm] = useState(
-  
-    
-    {
+  const [formData, setFormData] = useState({
       name:auth.currentUser.displayName,
       email:auth.currentUser.email
     })
 
-    const {name, email} = form
+    const {name, email} = formData;
     function onLogout (){
       auth.signOut()
       navigate('/')
     }
+
+    
   return (
     <section className='max-w-6xl mx-auto flex justify-center flex-col'>
         <h1 className='text-3xl mt-6 font-bold text-center'>Profile </h1>
