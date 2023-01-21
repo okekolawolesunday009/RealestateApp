@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import {doc } from 'firebase/firestore';
+import {db} from '../firebase'
 import { getAuth, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import { toast } from 'react-toastify';
 
@@ -82,7 +83,7 @@ export default function Profile() {
           <div className="flex justify-between whitespace-no-wrap ">
           <div className='md:text-sm sm:text-lg lg:text-lg'>Do you want to change your name <span className='text-red-600 ml-1 hover:text-red-700 cursor-pointer transition ease-in-out duration-200' 
            onClick={handleChange}>
-          {changeProfileName ? "edit" : "Apply changes"}
+          {changeProfileName ? "Apply changes" : "edit"}
           </span>
           </div>
           <div className='text-blue-600 ml-1 hover:text-blue-700 cursor-pointer transition ease-in-out duration-200 md:text-sm sm:text-lg lg:text-lg' onClick={onLogout}>Sign out</div>

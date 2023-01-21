@@ -1,16 +1,35 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import '../index.css';
 import Nav from '../Pages/Nav';
 import '../css/header.css';
 import {GoThreeBars} from 'react-icons/go'
 import {MdCancel} from 'react-icons/md'
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 
 
 export default function Header(selected) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [pageState, setPageState]= useState('Sign-in')
+  const auth = getAuth();
+  useEffect(() => {
+    onAuthStateChanged(auth, (user)=>{
+      if(user){
+        setPageState("Profile")
+      }
+    
+    })
+  }, [auth])
+  
+
+  function pathMathRoute(route){
+    if (route === location.pathname){
+      return true
+    }
+  }
     const [showNavx, setShowNavx]= useState(true);
-    const navigate = useNavigate()
     const [navBarshow, setNavBarShow] = useState(true)
 
 
@@ -47,10 +66,12 @@ export default function Header(selected) {
                     <Link to={'/offers'}>
                        <Nav  title='Offers' />
                     </Link>
-                    <li className={`${pathMathRoute("/sign-in") || pathMathRoute("/profile")}`}>
-                        <Nav  title='SignIn'/>
+                    <div onClick={()=> navigate("/profile")}>
+                        {/* <Nav className={`${pathMathRoute("/sign-in") || pathMathRoute("/profile")}`}
+                          title='SignIn'/> */}
+                          <li className={` text-lg font-bold cursor-pointer ${pathMathRoute("/sign-in")  || pathMathRoute("/profile") && " border-b-red-500"}`}>{pageState}</li>
 
-                    </li>
+                    </div>
                        
                
                    
