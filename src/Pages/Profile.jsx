@@ -90,7 +90,7 @@ export default function Profile() {
           <div className='text-blue-600 ml-1 hover:text-blue-700 cursor-pointer transition ease-in-out duration-200 md:text-sm sm:text-lg lg:text-lg' onClick={onLogout}>Sign out</div>
           </div>
           <button type='submit' className='w-full bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium rounded shadow-md hover:bg-blue-700 transition duration-150 ease-in-out active:bg-blue-800 hover: shadow-lg'>
-             <Link to={'/create-list'} className="flex justify-center items-center">
+             <Link to={'/create-listing'} className="flex justify-center items-center">
                 <FcHome className='mr-2 text-2xl bg-red-200 rounded-full p-1 border-2'/>
                 Sell or rent your home
              </Link>
