@@ -19,7 +19,7 @@ export default function CreateListing() {
     const {type, name,  bedrooms, bathrooms, description,address, parking, furnished, offer, regularPrice, discountPrice} = formData
     function onChange(){}
   return (
-   <main className='px-6 '>
+   <main className='sm:px-6 mx-auto max-w-lg'>
     <h1 className="text-3xl text-center mt-6 font-bold" >
         Create a Listing </h1>
        
@@ -116,12 +116,17 @@ export default function CreateListing() {
              
                 </div>
            </div>
-           <div className='flex flex-col gap-2 mt-6'>
+           <div className='flex  gap-2 mt-6'>
+               <div className=' flex gap-4'>
                <label className='text-lg font-medium'> Regular Price</label>
                <input type="number" name="name" id="name" 
                onChange={onChange}
                value={regularPrice}
-               className='shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full rounded-sm' maxLength={43} minLength={10}  />
+               className='shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-[50%] rounded-sm' maxLength={43} minLength={10}  />
+               </div>
+               <div>
+                <p>$/Month</p>
+               </div>
           </div>
           <div className='flex flex-col gap-2 mt-6'>
                <label className='text-lg font-medium'> Discount Price</label>
@@ -132,21 +137,19 @@ export default function CreateListing() {
           </div>
           <div className='flex flex-col gap-2 mt-6'>
                <label className='text-lg font-medium'> Images</label>
+               <p className='text-gray-600'>The first image will be cover (max-6)</p>
                <div  className='shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full rounded-sm bg-white py-3 px-2 '>
-               <input type="file" name="name" id="name" 
-               onChange={onChange}
+                
+               <input type="file" id="images" accept=".jpg,.png,.jpeg" required multiple
+               onChange={onChange} className='w-full px-3 py-1.5 border border-gray-300 rounded'
             //    value={discountPrice}
                  />
                 
                </div>
               
           </div>
-          <button type='submit' className='w-full mt-6 bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium rounded shadow-md hover:bg-blue-700 transition duration-150 ease-in-out active:bg-blue-800 hover: shadow-lg'>
-           
-               
+          <button type='submit' className='w-full mt-6 mb-6 bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium rounded shadow-md hover:bg-blue-700 transition duration-150 ease-in-out active:bg-blue-800 '>
                Create Listing
-           
-           
           </button>
 
           
