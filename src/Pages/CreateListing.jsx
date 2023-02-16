@@ -1,12 +1,14 @@
-import { async } from '@firebase/util';
 import React, { useState } from 'react'
 import { toast } from 'react-toastify';
 
 export default function CreateListing() {
+  const [loading, setLoading] = useState(false)
+  
+ 
     const [formData, setFormData] = useState({
         type:"rent",
         name: "",
-        bedroomsa: 1,
+        bedrooms: 1,
         bathrooms: 2,
         description: "",
         address: "",
@@ -15,7 +17,7 @@ export default function CreateListing() {
         offer: false,
         regularPrice: 1,
         discountPrice: 0,
-        images:{}
+        images:[]
 
 
     })
@@ -46,21 +48,36 @@ export default function CreateListing() {
     }
     async function submit(e){
       e.preventDefault();
-      function storeImage(){
+      setLoading(true);
+      if(discountPrice >= regularPrice){
+        setLoading(false);
+        toast.error("discount price needs to be less than regular price")
+
+      }
+      if(images.length > 6){
+        setLoading(false);
+        toast.error("images cannot be more than 6")
+      }
+      
+
+      async function storeImage(){
 
 
       }
-      const imgUrls = await Promise.all(
-        [...images].map((image) => storeImage(image)).catch((error)=>{
-          toast.error("images not uploaded");
-          return
-        })
+
+      // const imgUrls = await Promise.all(
+      //   [...images].map((image) => storeImage(image)).catch((error)=>{
+      //     toast.error("images not uploaded");
+      //     return
+      //   })
         
-      );
+      // );
       console.log("submitted")
     }
     
-    
+    if(loading){
+      return <div className='lds-facebook spinner'><div></div><div></div><div></div></div>;
+    }
     
   return (
    <main className='px-6 mx-auto lg:max-w-lg'>
@@ -102,6 +119,7 @@ export default function CreateListing() {
                <label className='text-lg font-medium'> Name</label>
                <input type="text" name="name" id="name" 
                 value={name}
+                required
                onChange={onChange}
                className='shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full rounded-sm' maxLength={43} minLength={10} placeholder="Full Name" />
           </div>
@@ -189,10 +207,13 @@ export default function CreateListing() {
                <p className='text-gray-600'>The first image will be cover (max-6)</p>
                <div  className='shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full rounded-sm bg-white py-3 px-2 '>
                 
-               <input type="file" id="images" accept=".jpg,.png,.jpeg" required={offer} multiple
-               onChange={onChange} 
+               <input type="file" id="images" accept=".jpg,.png,.jpeg"
+                // required={offer}
+                multiple
+                onChange={onChange} 
+              //  value={images}
                className='w-full px-3 py-1.5 border border-gray-300 rounded'
-            //    value={discountPrice}
+            
                  />
                 
                </div>
