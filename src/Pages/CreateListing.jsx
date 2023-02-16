@@ -1,10 +1,12 @@
+import { async } from '@firebase/util';
 import React, { useState } from 'react'
+import { toast } from 'react-toastify';
 
 export default function CreateListing() {
     const [formData, setFormData] = useState({
         type:"rent",
         name: "",
-        bedrooms: 1,
+        bedroomsa: 1,
         bathrooms: 2,
         description: "",
         address: "",
@@ -12,11 +14,12 @@ export default function CreateListing() {
         furnished: true,
         offer: false,
         regularPrice: 1,
-        discountPrice: 0
+        discountPrice: 0,
+        images:{}
 
 
     })
-    const {type, name, bedrooms, bathrooms, description,address, offer, regularPrice, discountPrice, parking, furnished} = formData
+    const {type, name, bedrooms, bathrooms, description,address, offer, regularPrice, discountPrice, parking, furnished, images} = formData
     function onChange(e){
       
       let boolean = null;
@@ -41,12 +44,30 @@ export default function CreateListing() {
         }))
       }
     }
+    async function submit(e){
+      e.preventDefault();
+      function storeImage(){
+
+
+      }
+      const imgUrls = await Promise.all(
+        [...images].map((image) => storeImage(image)).catch((error)=>{
+          toast.error("images not uploaded");
+          return
+        })
+        
+      );
+      console.log("submitted")
+    }
+    
+    
+    
   return (
    <main className='px-6 mx-auto lg:max-w-lg'>
     <h1 className="text-3xl text-center mt-6 font-bold" >
         Create a Listing </h1>
        
-       <form action="">
+       <form action="" onSubmit={submit}>
           <p className="text-lg mt-6 font-semibold"> Sell / Rent</p>
           <div className="flex gap-4 ">
               <button type="button" id="type" value="sale"
@@ -169,14 +190,17 @@ export default function CreateListing() {
                <div  className='shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full rounded-sm bg-white py-3 px-2 '>
                 
                <input type="file" id="images" accept=".jpg,.png,.jpeg" required={offer} multiple
-               onChange={onChange} className='w-full px-3 py-1.5 border border-gray-300 rounded'
+               onChange={onChange} 
+               className='w-full px-3 py-1.5 border border-gray-300 rounded'
             //    value={discountPrice}
                  />
                 
                </div>
               
           </div>
-          <button type='submit' className='w-full mt-6 mb-6 bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium rounded shadow-md hover:bg-blue-700 transition duration-150 ease-in-out active:bg-blue-800 '>
+          <button
+           type='submit' className='w-full mt-6 mb-6 bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium rounded shadow-md hover:bg-blue-700 transition duration-150 ease-in-out active:bg-blue-800 '>
+
                Create Listing
           </button>
 
