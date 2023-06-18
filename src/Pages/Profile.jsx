@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import {doc } from 'firebase/firestore';
+import {doc, updateDoc } from 'firebase/firestore';
 import {db} from '../firebase'
 import { getAuth, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import { toast } from 'react-toastify';
@@ -12,16 +12,18 @@ export default function Profile() {
   const auth = getAuth();
   async function submit(){
     try {
-      if(auth.currentUser.displayName !== name){
-           
+      if(auth.currentUser.displayName !== name){//if name is not equal to existing name
+           //update in authentication
             const userCredential = await createUserWithEmailAndPassword(auth);
            await  updateProfile(auth.currentUser, {
             displayName: name
         });
-    //  const user = userCredential.user;
+
+        //update in firestore
+     const user = userCredential.user;
     const docRef = doc(db, 'users', auth.currentUser.uid)
-      await updateProfile(docRef, {
-        name 
+      await updateDoc(docRef, {//updateprofile
+        name : name //they are d same so we can write hust name
       })
     toast.success('profile details updated')
      }
@@ -82,12 +84,12 @@ export default function Profile() {
                      name="email" id="email" />
 
           <div className="flex justify-between whitespace-no-wrap ">
-          <div className='md:text-sm sm:text-lg lg:text-lg'>Do you want to change your name <span className='text-red-600 ml-1 hover:text-red-700 cursor-pointer transition ease-in-out duration-200' 
+          <div className='text-sm md:text-sm sm:text-lg lg:text-lg '>Do you want to change your name <span className='text-red-600 ml-1 hover:text-red-700 cursor-pointer transition ease-in-out duration-200' 
            onClick={handleChange}>
           {changeProfileName ? "Apply changes" : "edit"}
           </span>
           </div>
-          <div className='text-blue-600 ml-1 hover:text-blue-700 cursor-pointer transition ease-in-out duration-200 md:text-sm sm:text-lg lg:text-lg' onClick={onLogout}>Sign out</div>
+          <div className='text-blue-600 ml-1 hover:text-blue-700 cursor-pointer transition ease-in-out duration-200 text-sm md:text-sm sm:text-lg lg:text-lg' onClick={onLogout}>Sign out</div>
           </div>
           <button type='submit' className='w-full bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium rounded shadow-md hover:bg-blue-700 transition duration-150 ease-in-out active:bg-blue-800 hover: shadow-lg'>
              <Link to={'/create-listing'} className="flex justify-center items-center">

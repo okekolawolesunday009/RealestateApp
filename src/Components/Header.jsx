@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import '../index.css';
+import '../styles/header.css'
 import Nav from '../Pages/Nav';
 import '../css/header.css';
 import {GoThreeBars} from 'react-icons/go'
@@ -24,7 +25,7 @@ export default function Header(selected) {
   }, [auth])
   
 
-  function pathMathRoute(route){
+  function pathMatchRoute(route){
     if (route === location.pathname){
       return true
     }
@@ -59,17 +60,19 @@ export default function Header(selected) {
             <div className='Nav' >
           
                 <ul className={`flex lg:space-x-10 md:space-x-10 ${navBarshow ? 'option' : 'options__open'} `}>
-                    <Link to={'/'}>
-                       <Nav selected title='Home' />
-
-                    </Link>
-                    <Link to={'/offers'}>
-                       <Nav  title='Offers' />
-                    </Link>
-                    <div onClick={()=> navigate("/profile")}>
-                        {/* <Nav className={`${pathMathRoute("/sign-in") || pathMathRoute("/profile")}`}
+                       <div className='show-active' onClick={()=> navigate("/")}>
+                
+                        <li className={` text-lg font-bold cursor-pointer `}>Home</li>
+                   </div>
+                    <div className='show-active' onClick={()=> navigate("/offers")}>
+                
+                          <li className={` text-lg font-bold cursor-pointer `}>offers</li>
+                    </div>
+                       
+                    <div className='show-active' onClick={()=> navigate("/profile")}>
+                        {/* <Nav className={`${pathMatchRoute("/sign-in") || pathMatchRoute("/profile")}`}
                           title='SignIn'/> */}
-                          <li className={` text-lg font-bold cursor-pointer ${pathMathRoute("/sign-in")  || pathMathRoute("/profile") && " border-b-red-500"}`}>{pageState}</li>
+                          <li className={` text-lg font-bold cursor-pointer ${pathMatchRoute("/sign-in")  || pathMatchRoute("/profile") && " border-b-red-500"}`}>{pageState}</li>
 
                     </div>
                        

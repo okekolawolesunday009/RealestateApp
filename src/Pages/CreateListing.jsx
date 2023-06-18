@@ -1,15 +1,29 @@
-import React, { useState } from 'react'
+import { getAuth } from 'firebase/auth';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { db } from '../firebase';
+import {useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function CreateListing() {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const auth = getAuth();
+  const navigate = useNavigate();
+  // useEffect(() => {
+  //   async function fetchListingUser(){
+
+  //   }
+  //   fetchListingUser()
+  // }, []);
   
- 
+
     const [formData, setFormData] = useState({
-        type:"rent",
+        type:"rent ",
         name: "",
         bedrooms: 1,
-        bathrooms: 2,
+        bathrooms: 1,
         description: "",
         address: "",
         parking: true,
@@ -22,6 +36,7 @@ export default function CreateListing() {
 
     })
     const {type, name, bedrooms, bathrooms, description,address, offer, regularPrice, discountPrice, parking, furnished, images} = formData
+
     function onChange(e){
       
       let boolean = null;
@@ -42,42 +57,104 @@ export default function CreateListing() {
         setFormData((p) =>({
           ...p,
           [e.target.id]: boolean ?? e.target.value
-          //we want the true and false to be considered so boolean state can be either if not 
+          //we want the true and false to be considered so boolean state can be either if not set it to value (??) using this
         }))
       }
     }
     async function submit(e){
       e.preventDefault();
       setLoading(true);
-      if(discountPrice >= regularPrice){
+      if(+discountPrice >= +regularPrice){
         setLoading(false);
         toast.error("discount price needs to be less than regular price")
+        return;
 
       }
       if(images.length > 6){
         setLoading(false);
-        toast.error("images cannot be more than 6")
+        toast.error("images cannot be more than 6");
+        return;
       }
       
 
-      async function storeImage(){
+        async function storeImage(image){
+           return new Promise((resolve, reject) => {
+             const storage = getStorage();
+             const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+             const storageRef = ref(storage, filename);
+             const uploadTask = uploadBytesResumable(storageRef, image);
 
-
-      }
-
-      // const imgUrls = await Promise.all(
-      //   [...images].map((image) => storeImage(image)).catch((error)=>{
-      //     toast.error("images not uploaded");
-      //     return
-      //   })
+             //copy this from firstore
+             uploadTask.on('state_changed', 
+          (snapshot) => {
+            // Observe state change events such as progress, pause, and resume
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+              case 'paused':
+                console.log('Upload is paused');
+                break;
+              case 'running':
+                console.log('Upload is running');
+                break;
+            }
+          }, 
+          (error) => {
+            // Handle unsuccessful uploads
+            setLoading(false);
+            reject(error)
+          }, 
+          () => {
+            // Handle successful uploads on complete
+            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              resolve('image uploaded', downloadURL);
+            });
+          }
+        );
+                      
+          })
         
-      // );
-      console.log("submitted")
-    }
+       }
+
+      const imgUrls = await Promise.all(
+        [...images].map((image) => 
+        storeImage(image))
+        ).catch((error)=>{
+          setLoading(false);
+          toast.error("images not uploaded");
+          return;
+        });
+        
     
+      console.log("submitted image")
+      console.log(imgUrls)
+      //store to db
+      const formDataCopy = {
+        ...formData,
+        imgUrls,
+        timeStamp: serverTimestamp(),
+      useRef: auth.currentUser.uid
+
+      };
+      delete formDataCopy.images;
+      !formDataCopy.offer && delete formDataCopy.discountPrice;
+      const docRef = await addDoc(collection(db, "listings"), formDataCopy);
+      setLoading(false);
+      toast.success("listing created");
+      navigate(`category/${formDataCopy.type}/${docRef.id}`);
+    }
+
+
+    //spiner-loading
     if(loading){
       return <div className='lds-facebook spinner'><div></div><div></div><div></div></div>;
     }
+
+    
+
+    
     
   return (
    <main className='px-6 mx-auto lg:max-w-lg'>
@@ -88,21 +165,23 @@ export default function CreateListing() {
           <p className="text-lg mt-6 font-semibold"> Sell / Rent</p>
           <div className="flex gap-4 ">
               <button type="button" id="type" value="sale"
-               onClick={onChange} className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full ${ type === "rent" ? "bg-white text-black" : "bg-slate-600 text-white"  }`}>
+               onClick={onChange} className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full ${ type === "rent" ? "bg-white text-slate-600" : "bg-slate-600 text-white"  }`}>
                 sell
               </button>
               <button type="button" id="type" value="rent"
-               onClick={onChange} className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full ${ type === "sale" ? "bg-white text-black" : "bg-slate-600 text-white"  }`}>
+               onClick={onChange} className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full ${ type === "sale" ? "bg-white text-slate-600" : "bg-slate-600 text-white"  }`}>
                 Rent
               </button>
           </div>
-          <div className='flex  mt-6'>
+          <div className='flex  mt-6  space-x-6'>
             <div className='flex flex-col'>
             <label className='text-lg font-medium'> Beds</label>
                <input type="number" name="bedrooms" id="bedrooms" 
                onChange={onChange}
                value={bedrooms}
-               className='shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-[50%] rounded-sm'  />
+               max="50"
+               min="1"
+               className='px-4 py-2  shadow-md hover:shadow-lg focus:shadow-lg text-center active:shadow-lg transition duration-150 ease rounded-sm'  />
                
             </div>
             <div className='flex flex-col'>
@@ -110,7 +189,9 @@ export default function CreateListing() {
                <input type="number" name="bathrooms" id="bathrooms" 
                onChange={onChange}
                value={bathrooms}
-               className='shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-[50%] rounded-sm'  />
+               max="50"
+               min="1"
+               className=' text-center shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease  rounded-sm'  />
                
             </div>
           </div>
@@ -144,11 +225,17 @@ export default function CreateListing() {
                </div>
                 <div className='flex gap-4 '>
                 <button type="button" id='furnished'  value={true}
-               onClick={onChange} className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full ${ !furnished? "bg-white text-black" : "bg-slate-600 text-white"  }`}>
+               onClick={onChange} className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full ${ !furnished
+                ? "bg-white text-black" 
+                : "bg-slate-600 text-white"  }`}>
                 yes
               </button>
               <button type="button"  id='furnished' value={false}
-               onClick={onChange} className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full ${ furnished  ? "bg-white text-black" : "bg-slate-600 text-white"  }`}>
+               onClick={onChange} className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full ${
+                 furnished 
+                  ? "bg-white text-black"
+                   : "bg-slate-600 text-white"  
+                   }`}>
                 No
               </button>
                 </div>
@@ -156,7 +243,6 @@ export default function CreateListing() {
           <div className='flex flex-col gap-2 mt-6'>
                <label className='text-lg font-medium'> Address</label>
                <textarea  name="address" id="address"
-                // value={description}
                 onChange={onChange}
                value={address} className='shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full rounded-sm' placeholder="Address" />
           </div>
@@ -173,11 +259,16 @@ export default function CreateListing() {
                </div>
                 <div className='flex gap-4 '>
                 <button type="button" id="offer" value={true}
-               onClick={onChange} className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full ${ !offer ? "bg-white text-black" : "bg-slate-600 text-white"  }`}>
+               onClick={onChange} className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full ${ !offer
+                ? "bg-white text-black" 
+                : "bg-slate-600 text-white"  }`}>
                 Yes
               </button>
                 <button type="button" id="offer" value={false}
-               onClick={onChange} className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full ${ offer ? "bg-white text-black" : "bg-slate-600 text-white"  }`}>
+               onClick={onChange} className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full ${ 
+                offer 
+                ? "bg-white text-black" 
+                : "bg-slate-600 text-white"  }`}>
                 No
               </button>
              
@@ -189,26 +280,38 @@ export default function CreateListing() {
                <input type="number" name="regularPrice" id="regularPrice" 
                onChange={onChange}
                value={regularPrice}
-               className='shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-[50%] rounded-sm' maxLength={43} minLength={10}  />
+               className='text-center shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-[50%] rounded-sm' maxLength={43000000} minLength={10}  />
                </div>
                <div>
-                <p>$/Month</p>
+                {type === "rent" && (<p>$/Month</p>)}
                </div>
           </div>
+          <div className='flex  items-center'>
+          {!offer && (
           <div className='flex flex-col gap-2 mt-6'>
                <label className='text-lg font-medium'> Discount Price</label>
                <input type="number" name="discountPrice" id="discountPrice" 
                onChange={onChange}
+               required ={offer}
                value={discountPrice}
-               className='shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full rounded-sm' maxLength={43} minLength={10}  />
+               className='text-center shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-[50%] rounded-sm' maxLength={430} minLength={10}  />
           </div>
+              
+
+           )}
+           
+               <div>
+               {type === "rent" && (<p>$/Month</p>)}
+              </div>
+
+            </div>
           <div className='flex flex-col gap-2 mt-6'>
                <label className='text-lg font-medium'> Images</label>
                <p className='text-gray-600'>The first image will be cover (max-6)</p>
                <div  className='shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full rounded-sm bg-white py-3 px-2 '>
                 
                <input type="file" id="images" accept=".jpg,.png,.jpeg"
-                // required={offer}
+                required={offer}
                 multiple
                 onChange={onChange} 
               //  value={images}

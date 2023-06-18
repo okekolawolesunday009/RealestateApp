@@ -12,6 +12,8 @@ import PrivateRoute from './Components/PrivateRoute';
 import CreateListing from './Pages/CreateListing';
 
 function App() {
+  
+  
   return (
     <div className=''>
       {/* <div className='text-4xl text-center  mt-6 font-bold none md:w-[67%]  rounded-sm'></div> */}
@@ -27,7 +29,9 @@ function App() {
                 <Route path='/sign-up' element={<SignUp/>}/>
                 <Route path='/forgot-password' element={<ForgotPassword/>}/>
                 <Route path='/offers' element={<Offers/>}/>
-                <Route path='/create-listing' element={<CreateListing/>}/>
+                <Route path='/create-listing' element={<PrivateRoute/>}>
+                   <Route path='/create-listing' element={<CreateListing/>}/>
+                </Route>
             </Routes>
         </Router>
         <ToastContainer
