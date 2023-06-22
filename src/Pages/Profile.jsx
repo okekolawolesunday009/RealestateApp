@@ -1,86 +1,140 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {doc, updateDoc } from 'firebase/firestore';
-import {db} from '../firebase'
-import { getAuth, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
+import { getAuth, updateProfile } from 'firebase/auth';
+import { collection, query, where, orderBy, getDocs, updateDoc, doc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import { FcHome } from 'react-icons/fc';
+import ListingItem from '../Components/ListingItem';
+import Fetch from '../Components/Fetch';
+import { db } from '../firebase';
 
 export default function Profile() {
- 
   const [changeProfileName, setChangeProfileName] = useState(false);
+  const [listings, setListings] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const auth = getAuth();
-  async function submit(){
-    try {
-      if(auth.currentUser.displayName !== name){//if name is not equal to existing name
-           //update in authentication
-            const userCredential = await createUserWithEmailAndPassword(auth);
-           await  updateProfile(auth.currentUser, {
-            displayName: name
+
+  // useEffect(() => {
+  //   async function fetchListingUser() {
+  //     const listingRef = collection(db, 'listings');
+  //     setLoading(true);
+
+  //     // Create query
+  //     const q = query(listingRef, where('userRef', '==', auth.currentUser.uid), orderBy('timestamp', 'desc'));
+
+  //     try {
+  //       const querySnap = await getDocs(q);
+  //       let listings = [];
+
+  //       querySnap.forEach((doc) => {
+  //         console.log(doc.id, '=>', doc.data());
+  //       });
+
+  //       setListings(listings);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+
+  //     setLoading(false);
+  //   }
+
+  //   fetchListingUser();
+  // }, [auth.currentUser]);
+
+
+  useEffect(() => {
+    async function fetchDataFromFirestore() {
+      try {
+        const querySnapshot = await getDocs(
+            collection(db, 'listings'));
+        let fetchedListings = [];
+        // const q = query( collection(db, 'listings'),
+        //  where('userRef', '==', auth.currentUser.uid),
+        //   orderBy('timestamp', 'desc'));
+
+        
+        querySnapshot.forEach((doc) => {
+          fetchedListings.push({
+            id: doc.id,
+            data: doc.data()
+          });
         });
 
-        //update in firestore
-     const user = userCredential.user;
-    const docRef = doc(db, 'users', auth.currentUser.uid)
-      await updateDoc(docRef, {//updateprofile
-        name : name //they are d same so we can write hust name
-      })
-    toast.success('profile details updated')
-     }
+        setListings(fetchedListings);
+      } catch (error) {
+        console.error('Error fetching data from Firestore:', error);
+      }
+    }
 
+    fetchDataFromFirestore();
+  }, []);
+  async function submit() {
+    try {
+      if (auth.currentUser.displayName !== name) {
+        await updateProfile(auth.currentUser, {
+          displayName: name,
+        });
+
+        const docRef = doc(db, 'users', auth.currentUser.uid);
+        await updateDoc(docRef, {
+          name,
+        });
+
+        toast.success('Profile details updated');
+      }
     } catch (error) {
-      toast.error("Could not update profile")
-      
+      toast.error('Could not update profile');
     }
-   
-  
   }
-  
-  function handleChange(){
-    setChangeProfileName((prevState) => !prevState)
-    console.log("clicked")
-    changeProfileName && submit()
+
+  function handleChange() {
+    setChangeProfileName((prevState) => !prevState);
+    changeProfileName && submit();
   }
-  function handleChangeName(e){
+
+  function handleChangeName(e) {
     e.preventDefault();
-    setFormData((prevState)=>({
+    setFormData((prevState) => ({
       ...prevState,
-      [e.target.id] : e.target.value
-  }))
-   
-
+      [e.target.id]: e.target.value,
+    }));
   }
-  const navigate = useNavigate()
-  const [formData, setFormData] = useState({
-      name:auth.currentUser.displayName,
-      email:auth.currentUser.email
-    })
 
-    const {name, email} = formData;
-    function onLogout (){
-      auth.signOut()
-      navigate('/')
-    }
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: auth.currentUser.displayName,
+    email: auth.currentUser.email,
+  });
+
+  const { name, email } = formData;
+
+  function onLogout() {
+    auth.signOut();
+    navigate('/');
+  }
 
     
   return (
+    <>
     <section className='max-w-6xl mx-auto flex justify-center flex-col'>
         <h1 className='text-3xl mt-6 font-bold text-center'>Profile </h1>
     <form action="" className='w-full md:w[50%] mt-6 px-3 flex gap-4 flex-col'>
           <input
-                     className={`text-xl text-gray-700 w-full h-11 rounded-xl px-4 py-2  border-gray-300 transition ease-in-out ${changeProfileName && "bg-red-200"}`}
+                     className={`text-xl text-gray-700 w-full h-11 rounded-xl px-4 py-2  border-gray-300 transition ease-in-out
+                      ${changeProfileName && "bg-red-200"}`}
                      value={name}
-                     disabled ={!changeProfileName}
+                     disabled ={!changeProfileName} 
                      onChange={handleChangeName}
                      type="text"
-                    //  placeholder='Full name' 
+                  
                      name="name" id="name" />
           <input
-                     className='text-xl text-gray-700 w-full h-11 rounded-xl px-4 py-2  border-gray-300 transition ease-in-out'
+                     className={`text-xl text-gray-700 w-full h-11 rounded-xl px-4 py-2  border-gray-300 transition ease-in-out`}
                      value={email}
-                    //  onChange={handleChange}
+                     onChange={handleChange}
                      type="email"
-                    //  placeholder='Email' 
+                  
                      name="email" id="email" />
 
           <div className="flex justify-between whitespace-no-wrap ">
@@ -91,7 +145,7 @@ export default function Profile() {
           </div>
           <div className='text-blue-600 ml-1 hover:text-blue-700 cursor-pointer transition ease-in-out duration-200 text-sm md:text-sm sm:text-lg lg:text-lg' onClick={onLogout}>Sign out</div>
           </div>
-          <button type='submit' className='w-full bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium rounded shadow-md hover:bg-blue-700 transition duration-150 ease-in-out active:bg-blue-800 hover: shadow-lg'>
+          <button type='submit' className='w-full bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium rounded shadow-md hover:bg-blue-700 transition duration-150 ease-in-out active:bg-blue-800 hover:shadow-lg'>
              <Link to={'/create-listing'} className="flex justify-center items-center">
                 <FcHome className='mr-2 text-2xl bg-red-200 rounded-full p-1 border-2'/>
                 Sell or rent your home
@@ -101,5 +155,28 @@ export default function Profile() {
       </form>
     
      </section>
+     <div className='max-w-6xl px-3 mt-6 mx-auto'>
+    
+
+     {listings !== null && !loading && (
+      <>
+       <h2 className='text-center font-semibold text-2xl'>My listing</h2>
+       <ul className='sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl-grid-cols-5 mt-6 mb-6 '>
+            {listings ? (
+              listings.map((listing) => (
+                <ListingItem key={listing.id} listing = {listing.data}/>
+              ))
+            ) : (
+              <p>Loading...</p>
+            )}
+        
+       </ul>
+      </>
+     )}
+      </div>
+
+     </>
+     
+    
   )
 }

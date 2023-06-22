@@ -28,14 +28,18 @@ export default function SignUp() {
         e.preventDefault()
         try {
                 const auth = getAuth();
-                const userCredential = await createUserWithEmailAndPassword(auth,email, password)
+                const userCredential = await createUserWithEmailAndPassword(
+                    auth,
+                    email,
+                    password)
                 updateProfile(auth.currentUser, {
                     displayName: fname
                 })
                 const user = userCredential.user;
 
+                console.log(user)
                 //trying to remove password
-                const formDataCopy ={...formData }
+                const formDataCopy ={...formData };
                 delete formDataCopy.password;
                 //generates time
                 formDataCopy.timestamp = serverTimestamp();
@@ -45,14 +49,14 @@ export default function SignUp() {
                 await setDoc(doc(db, 'users', user.uid), formDataCopy);
                 navigate("/");
                 // console.log(user)
-                // toast.success('registration successful')
+                toast.success('registration successful')
 
                 //after sign up use usenavigate hook to redirect to homepag
             
         } catch (error) {
     
-            toast.error("Something went wrong with the registration")
-            // console.log(error)
+            // toast.error("Something went wrong with the registration")
+            console.log(error)
             
         }
 

@@ -1,7 +1,7 @@
 import { getAuth } from 'firebase/auth';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp} from 'firebase/firestore';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import React, { useState, useEffect } from 'react';
+import React, {useState} from 'react';
 import { toast } from 'react-toastify';
 import { db } from '../firebase';
 import {useNavigate } from 'react-router-dom';
@@ -11,12 +11,7 @@ export default function CreateListing() {
   const [loading, setLoading] = useState(false);
   const auth = getAuth();
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   async function fetchListingUser(){
 
-  //   }
-  //   fetchListingUser()
-  // }, []);
   
 
     const [formData, setFormData] = useState({
@@ -135,7 +130,7 @@ export default function CreateListing() {
         ...formData,
         imgUrls,
         timeStamp: serverTimestamp(),
-      useRef: auth.currentUser.uid
+        useRef: auth.currentUser.uid
 
       };
       delete formDataCopy.images;
@@ -143,7 +138,7 @@ export default function CreateListing() {
       const docRef = await addDoc(collection(db, "listings"), formDataCopy);
       setLoading(false);
       toast.success("listing created");
-      navigate(`category/${formDataCopy.type}/${docRef.id}`);
+      // navigate(`category/${formDataCopy.type}/${docRef.id}`);
     }
 
 
@@ -244,7 +239,8 @@ export default function CreateListing() {
                <label className='text-lg font-medium'> Address</label>
                <textarea  name="address" id="address"
                 onChange={onChange}
-               value={address} className='shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full rounded-sm' placeholder="Address" />
+               value={address}
+                className='shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full rounded-sm' placeholder="Address" />
           </div>
           <div className='flex flex-col gap-2 mt-6'>
                <label className='text-lg font-medium'> Description</label>
@@ -314,7 +310,6 @@ export default function CreateListing() {
                 required={offer}
                 multiple
                 onChange={onChange} 
-              //  value={images}
                className='w-full px-3 py-1.5 border border-gray-300 rounded'
             
                  />

@@ -19,6 +19,8 @@ export default function Header(selected) {
     onAuthStateChanged(auth, (user)=>{
       if(user){
         setPageState("Profile")
+      } else {
+        setPageState("sign-in")
       }
     
     })
@@ -42,7 +44,7 @@ export default function Header(selected) {
     }
 
   return (
-    <div className=' bg-white border-b shadow-sm  all w-full'>
+    <div className=' bg-white border-b shadow-sm  all w-full' >
         <header className='flex justify-between px-3 py-5 items-center max-w-6xl mx-auto sticky top-0'>
             <div className="">
                 <img src="https://static.rdc.moveaws.com/images/logos/rdc-logo-default.svg"
@@ -72,7 +74,9 @@ export default function Header(selected) {
                     <div className='show-active' onClick={()=> navigate("/profile")}>
                         {/* <Nav className={`${pathMatchRoute("/sign-in") || pathMatchRoute("/profile")}`}
                           title='SignIn'/> */}
-                          <li className={` text-lg font-bold cursor-pointer ${pathMatchRoute("/sign-in")  || pathMatchRoute("/profile") && " border-b-red-500"}`}>{pageState}</li>
+                          <li className={` text-lg font-bold cursor-pointer 
+                          ${(pathMatchRoute("/sign-in")  || pathMatchRoute("/profile")) 
+                          && " border-b-red-500"}`}>{pageState}</li>
 
                     </div>
                        
