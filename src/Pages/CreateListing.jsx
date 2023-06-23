@@ -109,6 +109,7 @@ export default function CreateListing() {
               resolve(downloadURL); // Resolve with the download URL
             } catch (error) {
               reject(error);
+              setLoading(false);
             }
           }
           // async () => {
