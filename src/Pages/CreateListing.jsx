@@ -126,7 +126,7 @@ export default function CreateListing() {
         storeImage(image))
         ).catch((error)=>{
           setLoading(false);
-          toast.error("images not uploaded size(less than 100kb)");
+          toast.error("images not uploaded size(less than 2Mb)");
           return;
         });
         
