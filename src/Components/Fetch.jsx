@@ -1,12 +1,22 @@
 import React, {useEffect, useState} from 'react'
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
-import { db } from '../firebase';
+import Listingitem from './ListingItem';
 
 
-export default function Fetch() {
+export default function Fetch({listing, id}) {
 
+const firebaseConfig = {
+    apiKey: "AIzaSyCNCQxtwDN4VTPA6WjZfooYEsbsk7Ay_V4",
+    authDomain: "realestate-react-d496c.firebaseapp.com",
+    projectId: "realestate-react-d496c",
+    storageBucket: "realestate-react-d496c.appspot.com",
+    messagingSenderId: "76357473580",
+    appId: "1:76357473580:web:7f507d4f185d5c89c8c889"
+  };
 
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 const [listings, setListings] = useState(null);
 
   // Fetch data from Firestore
@@ -41,16 +51,15 @@ const [listings, setListings] = useState(null);
     <div>
     {listings ? (
       listings.map((listing) => (
-        <div key={listing.id}>
-            <h2>{listing.id}</h2>
-            {/* {listing.data.imgUrls &&
-              listing.data.imgUrls.map((imageUrl, index) => (
-                <img key={index} src={imageUrl} alt="" />
-              ))}        */}
-       </div>
+        
+         <Listingitem key={listing.id} listing = {listing.data}/>           
+                      
+               
+       
       ))
     ) : (
-      <p>Loading...</p>
+       <div className='lds-facebook spinner'><div></div><div></div><div></div></div>
+     
     )}
   </div>
   )

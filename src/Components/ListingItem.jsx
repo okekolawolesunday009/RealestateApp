@@ -10,14 +10,10 @@ export default function Listingitem({listing, id}) {
     <li className="relative bg-white flex flex-col justify-between items-center shadow-md hover:shadow-xl rounded overflow-hidden transition-shadow duration-150 m-[10px]">
 
       <Link className='contents' to = {`/category/${listing.type}/${id}`}>
-        {/* <img src = {listing.imgUrls[0]} alt = ""/> */}
-        {/* {console.log((listing))} */}
         <img className= "h-[170px] w-full object-cover hover:scale-105 transition-scae duration-200 ease-in"
         loading='lazy'
-         src = {house} />
-      
-      
-     
+        src = {listing.imgUrls[0]} alt = ""/> 
+        
         <Moment className='absolute top-2 left-2 bg-[#3377cc] text-white uppercase text-xs font-semi-bold rounded-md px-2 py-1 shadow-lg' fromNow>
           {listing.timestamp?.toDate()}
         </Moment>    

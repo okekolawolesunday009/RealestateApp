@@ -15,60 +15,62 @@ export default function Profile() {
 
   const auth = getAuth();
 
-  // useEffect(() => {
-  //   async function fetchListingUser() {
-  //     const listingRef = collection(db, 'listings');
-  //     setLoading(true);
-
-  //     // Create query
-  //     const q = query(listingRef, where('userRef', '==', auth.currentUser.uid), orderBy('timestamp', 'desc'));
-
-  //     try {
-  //       const querySnap = await getDocs(q);
-  //       let listings = [];
-
-  //       querySnap.forEach((doc) => {
-  //         console.log(doc.id, '=>', doc.data());
-  //       });
-
-  //       setListings(listings);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-
-  //     setLoading(false);
-  //   }
-
-  //   fetchListingUser();
-  // }, [auth.currentUser]);
-
-
   useEffect(() => {
-    async function fetchDataFromFirestore() {
-      try {
-        const querySnapshot = await getDocs(
-            collection(db, 'listings'));
-        let fetchedListings = [];
-        // const q = query( collection(db, 'listings'),
-        //  where('userRef', '==', auth.currentUser.uid),
-        //   orderBy('timestamp', 'desc'));
+    async function fetchListingUser() {
+      const listingRef = collection(db, 'listings');
+      setLoading(true);
 
-        
-        querySnapshot.forEach((doc) => {
-          fetchedListings.push({
-            id: doc.id,
-            data: doc.data()
-          });
+      // Create query
+      const q = query(listingRef, where('userRef', '==', auth.currentUser.uid), orderBy('timestamp', 'desc'));
+
+      try {
+        const querySnap = await getDocs(q);
+        let listings = [];
+
+        querySnap.forEach((doc) => {
+          console.log(doc.id, '=>', doc.data());
         });
 
-        setListings(fetchedListings);
+        setListings(listings);
       } catch (error) {
-        console.error('Error fetching data from Firestore:', error);
+        console.error(error);
       }
+
+      setLoading(false);
     }
 
-    fetchDataFromFirestore();
-  }, []);
+    fetchListingUser();
+  }, [auth.currentUser]);
+
+
+  // useEffect(() => {
+  //   async function fetchDataFromFirestore() {
+  //     try {
+        
+  //       const querySnapshot = await getDocs(
+  //           collection(db, 'listings'));
+  //       let fetchedListings = [];
+
+  //       const q = query( collection(db, 'listings'),
+  //        where('userRef', '==', auth.currentUser.uid),
+  //         orderBy('timestamp', 'desc'));
+
+        
+  //       querySnapshot.forEach((doc) => {
+  //         fetchedListings.push({
+  //           id: doc.id,
+  //           data: doc.data()
+  //         });
+  //       });
+
+  //       setListings(fetchedListings);
+  //     } catch (error) {
+  //       console.error('Error fetching data from Firestore:', error);
+  //     }
+  //   }
+
+  //   fetchDataFromFirestore();
+  // }, []);
   async function submit() {
     try {
       if (auth.currentUser.displayName !== name) {
@@ -157,7 +159,7 @@ export default function Profile() {
      </section>
      <div className='max-w-6xl px-3 mt-6 mx-auto'>
     
-
+{/* 
      {listings !== null && !loading && (
       <>
        <h2 className='text-center font-semibold text-2xl'>My listing</h2>
@@ -169,11 +171,13 @@ export default function Profile() {
             ) : (
               <p>Loading...</p>
             )}
+            {console.log(listings)}
         
        </ul>
       </>
-     )}
+     )} */}
       </div>
+      <Fetch/>
 
      </>
      

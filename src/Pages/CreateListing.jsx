@@ -6,6 +6,8 @@ import { toast } from 'react-toastify';
 import { db } from '../firebase';
 import {useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { doc, updateDoc } from 'firebase/firestore';
+
 
 export default function CreateListing() {
   const [loading, setLoading] = useState(false);
@@ -70,6 +72,7 @@ export default function CreateListing() {
         toast.error("images cannot be more than 6");
         return;
       }
+
       
 
         async function storeImage(image){
@@ -100,25 +103,30 @@ export default function CreateListing() {
             setLoading(false);
             reject(error)
           }, 
-          () => {
-            // Handle successful uploads on complete
-            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              resolve('image uploaded', downloadURL);
-            });
+          async () => {
+            try {
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              resolve(downloadURL); // Resolve with the download URL
+            } catch (error) {
+              reject(error);
+            }
           }
+          // async () => {
+          //   // Upload successful
+          //   const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          //   resolve(downloadURL);
+          // }
         );
                       
           })
         
        }
-
       const imgUrls = await Promise.all(
         [...images].map((image) => 
         storeImage(image))
         ).catch((error)=>{
           setLoading(false);
-          toast.error("images not uploaded");
+          toast.error("images not uploaded size(less than 100kb)");
           return;
         });
         
@@ -138,7 +146,7 @@ export default function CreateListing() {
       const docRef = await addDoc(collection(db, "listings"), formDataCopy);
       setLoading(false);
       toast.success("listing created");
-      // navigate(`category/${formDataCopy.type}/${docRef.id}`);
+      navigate(`category/${formDataCopy.type}/${docRef.id}`);
     }
 
 
