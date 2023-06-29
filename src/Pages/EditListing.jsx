@@ -59,7 +59,7 @@ export default function EditListing() {
         toast.error("You cannot edit listing");
         navigate("/");
       }
-    }, []);
+    }, [auth.currentUser.uid, listing, navigate]);
 
     const {type, name, bedrooms, bathrooms, description,address, offer, regularPrice, discountPrice, parking, furnished, images} = formData
 
