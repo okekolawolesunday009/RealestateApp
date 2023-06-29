@@ -24,8 +24,8 @@ export default function Listingitem({listing, id, onEdit, onDelete}) {
           <MdLocationOn className='text-green-600'/>
           <p className='font-semibold text-sm mb-[2px]text-gray-600 truncate'>lagos</p>
         </div>
-        <p className='font-semibold m-0 text-xl'>{listing.name}</p>
-       <p className='text-[#457b9d] mt-2 font-semibold'>
+        <p className='font-semibold m-0 text-xl'>{listing.description}</p>
+       <p className='text-[#457b9d] mt-2 font-bold'>
         $
         {listing.offer ? 
           listing.discountedPrice?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -37,15 +37,17 @@ export default function Listingitem({listing, id, onEdit, onDelete}) {
         </p>
         <div className='flex items-center mt-[10px] space-x-3'>
           <div className='flex items-center space-x-1'>
-            <p>{listing.bedrooms > 1 ? `${listing.bedrooms} Beds` :"1 Bed"}</p>
+            <p  className='font-semibold'>
+              {listing.bedrooms > 1 ? `${listing.bedrooms} Beds` :"1 Bed"}</p>
           </div>
           <div>
-            <p>
+            <p className='font-semibold'>
               {listing.bathrooms > 1 ? `${listing.bathrooms} Baths` :"1 Bath"}</p>
             
           </div>
         </div>
       </div>
+      </Link>
       {onEdit && (
         <FaTrash className='absolute bottom-2 right-2 h-[14px] cursor-pointer text-red-500'
         onClick={() => onDelete(listing.id)}/>
@@ -56,7 +58,7 @@ export default function Listingitem({listing, id, onEdit, onDelete}) {
         onClick={() => onEdit(listing.id)}/>
         )}
        
-      </Link>
+    
        
     </li>
   )

@@ -1,16 +1,17 @@
 import { getAuth } from 'firebase/auth';
-import { addDoc, collection, serverTimestamp} from 'firebase/firestore';
+import { addDoc, collection, getDoc, serverTimestamp} from 'firebase/firestore';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { toast } from 'react-toastify';
 import { db } from '../firebase';
-import {useNavigate } from 'react-router-dom';
+import {useNavigate, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { doc, updateDoc } from 'firebase/firestore';
 
 
 export default function EditListing() {
   const [loading, setLoading] = useState(false);
+  const [listing, setListing] = useState(null);
   const auth = getAuth();
   const navigate = useNavigate();
 
@@ -31,7 +32,35 @@ export default function EditListing() {
         images:[]
 
 
-    })
+    });
+    const params = useParams()
+    useEffect(() => {
+      setLoading(true);
+      async function fetchListing(){
+        const docRef = doc(db, "listings", params.listingId);
+        const docSnap = await getDoc(docRef);
+
+        if(docSnap.exists()){
+          setListing(docSnap.data());
+          setFormData({
+            ...docSnap.data()
+          });
+          setLoading(false);
+        } else {
+          navigate("/");
+          toast.error("Listing does not exist");
+        }
+      }
+      fetchListing();
+
+    },[navigate, params.listingId]);
+    useEffect(() => {
+      if(listing && listing.userRef !== auth.currentUser.uid){
+        toast.error("You cannot edit listing");
+        navigate("/");
+      }
+    }, []);
+
     const {type, name, bedrooms, bathrooms, description,address, offer, regularPrice, discountPrice, parking, furnished, images} = formData
 
     function onChange(e){
@@ -67,11 +96,13 @@ export default function EditListing() {
         return;
 
       }
+      
       if(images.length > 6){
         setLoading(false);
         toast.error("images cannot be more than 6");
         return;
       }
+
 
       
 
@@ -135,14 +166,15 @@ export default function EditListing() {
         ...formData,
         imgUrls,
         timeStamp: serverTimestamp(),
-        useRef: auth.currentUser.uid
+        userRef: auth.currentUser.uid
 
       };
       delete formDataCopy.images;
       !formDataCopy.offer && delete formDataCopy.discountPrice;
-      const docRef = await addDoc(collection(db, "listings"), formDataCopy);
+      const docRef = doc(db, "listings", params.listingId);
+      await updateDoc(docRef, formDataCopy);
       setLoading(false);
-      toast.success("listing created");
+      toast.success("listing Edited");
       navigate(`category/${formDataCopy.type}/${docRef.id}`);
     }
 
@@ -159,7 +191,7 @@ export default function EditListing() {
   return (
    <main className='px-6 mx-auto lg:max-w-lg'>
     <h1 className="text-3xl text-center mt-6 font-bold" >
-        Create a Listing </h1>
+       Edit Listing </h1>
        
        <form action="" onSubmit={submit}>
           <p className="text-lg mt-6 font-semibold"> Sell / Rent</p>
@@ -312,7 +344,7 @@ export default function EditListing() {
                <div  className='shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-full rounded-sm bg-white py-3 px-2 '>
                 
                <input type="file" id="images" accept=".jpg,.png,.jpeg"
-                required={offer}
+                required
                 multiple
                 onChange={onChange} 
                className='w-full px-3 py-1.5 border border-gray-300 rounded'

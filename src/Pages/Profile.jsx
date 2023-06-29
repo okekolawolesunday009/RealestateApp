@@ -17,6 +17,7 @@ export default function Profile() {
   function onEdit(listingID){
 
     navigate(`/edit-listing/${listingID}`)
+    console.log(listingID)
 
   }
  async function onDelete(listingID){
@@ -59,7 +60,7 @@ export default function Profile() {
     }
 
     fetchDataFromFirestore();
-  }, [db]);
+  }, [ auth.currentUser.uid]);
 
   async function submit() {
     try {
@@ -165,7 +166,7 @@ export default function Profile() {
             ) : (
               <p>Loading...</p>
             )}
-            {console.log(listings)}
+            {/* {console.log(listings)} */}
         
        </ul>
       </>
