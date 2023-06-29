@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, updateProfile } from 'firebase/auth';
-import { collection, query, where, orderBy, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { collection, query, where, orderBy, getDocs, updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import { FcHome } from 'react-icons/fc';
-import ListingItem from '../Components/ListingItem';
-import Fetch from '../Components/Fetch';
 import { db } from '../firebase';
+import Listingitem from '../Components/ListingItem';
 
 export default function Profile() {
   const [changeProfileName, setChangeProfileName] = useState(false);
@@ -15,62 +14,53 @@ export default function Profile() {
 
   const auth = getAuth();
 
-  useEffect(() => {
-    async function fetchListingUser() {
-      const listingRef = collection(db, 'listings');
-      setLoading(true);
+  function onEdit(listingID){
 
-      // Create query
-      const q = query(listingRef, where('userRef', '==', auth.currentUser.uid), orderBy('timestamp', 'desc'));
+    navigate(`/edit-listing/${listingID}`)
 
-      try {
-        const querySnap = await getDocs(q);
-        let listings = [];
-
-        querySnap.forEach((doc) => {
-          console.log(doc.id, '=>', doc.data());
-        });
-
-        setListings(listings);
-      } catch (error) {
-        console.error(error);
-      }
-
-      setLoading(false);
+  }
+ async function onDelete(listingID){
+    if(window.confirm("Are you sure you want to delete")){
+      await deleteDoc(doc(db, "listings", listingID));
+      const updatedListings = listings.filter(
+        (listing) => listing.id !== listingID
+        );
+        setListings(updatedListings);
+        toast.success("Successfully deleted Listing");
     }
 
-    fetchListingUser();
-  }, [auth.currentUser]);
+  }
 
+  useEffect(() => {
+    async function fetchDataFromFirestore() {
+      try {
+        const listingRef = ( collection(db, 'listings'))
+        let fetchedListings = [];
+        const q = query(listingRef,
+         where ('userRef', '==', auth.currentUser.uid)
+         )
 
-  // useEffect(() => {
-  //   async function fetchDataFromFirestore() {
-  //     try {
+          const querySnapshot = await getDocs(q);
+          
+          console.log(querySnapshot);
+
         
-  //       const querySnapshot = await getDocs(
-  //           collection(db, 'listings'));
-  //       let fetchedListings = [];
+        querySnapshot.forEach((doc) => {
+          fetchedListings.push({
+            id: doc.id,
+            data: doc.data()
+          });
+        });
 
-  //       const q = query( collection(db, 'listings'),
-  //        where('userRef', '==', auth.currentUser.uid),
-  //         orderBy('timestamp', 'desc'));
+        setListings(fetchedListings);
+      } catch (error) {
+        console.error('Error fetching data from Firestore:', error);
+      }
+    }
 
-        
-  //       querySnapshot.forEach((doc) => {
-  //         fetchedListings.push({
-  //           id: doc.id,
-  //           data: doc.data()
-  //         });
-  //       });
+    fetchDataFromFirestore();
+  }, [db]);
 
-  //       setListings(fetchedListings);
-  //     } catch (error) {
-  //       console.error('Error fetching data from Firestore:', error);
-  //     }
-  //   }
-
-  //   fetchDataFromFirestore();
-  // }, []);
   async function submit() {
     try {
       if (auth.currentUser.displayName !== name) {
@@ -115,11 +105,10 @@ export default function Profile() {
     auth.signOut();
     navigate('/');
   }
-
     
   return (
     <>
-    <section className='max-w-6xl mx-auto flex justify-center flex-col'>
+    <section className='max-w-xl mx-auto flex justify-center flex-col'>
         <h1 className='text-3xl mt-6 font-bold text-center'>Profile </h1>
     <form action="" className='w-full md:w[50%] mt-6 px-3 flex gap-4 flex-col'>
           <input
@@ -157,16 +146,21 @@ export default function Profile() {
       </form>
     
      </section>
-     <div className='max-w-6xl px-3 mt-6 mx-auto'>
+     <div className='mt-6'>
     
-{/* 
+
      {listings !== null && !loading && (
       <>
        <h2 className='text-center font-semibold text-2xl'>My listing</h2>
        <ul className='sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl-grid-cols-5 mt-6 mb-6 '>
             {listings ? (
               listings.map((listing) => (
-                <ListingItem key={listing.id} listing = {listing.data}/>
+                <Listingitem
+                  key={listing.id} 
+                  listing = {listing.data}
+                  onDelete = {() => onDelete(listing.id)}        
+                  onEdit = {() => onEdit(listing.id)}
+                  />           
               ))
             ) : (
               <p>Loading...</p>
@@ -175,9 +169,10 @@ export default function Profile() {
         
        </ul>
       </>
-     )} */}
+     )}
       </div>
-      <Fetch/>
+     
+     
 
      </>
      

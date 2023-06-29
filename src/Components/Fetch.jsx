@@ -1,10 +1,31 @@
 import React, {useEffect, useState} from 'react'
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, deleteDoc, doc, where, orderBy, query } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
 import Listingitem from './ListingItem';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { getAuth } from 'firebase/auth';
 
 
 export default function Fetch({listing, id}) {
+  const navigate = useNavigate();
+  const auth = getAuth();
+  function onEdit(listingID){
+
+    navigate(`/edit-listing/${listingID}`)
+
+  }
+ async function onDelete(listingID){
+    if(window.confirm("Are you sure you want to delete")){
+      await deleteDoc(doc(db, "listings", listingID));
+      const updatedListings = listings. filter(
+        (listing) => listing.id !== listingID
+        );
+        setListings(updatedListings);
+        toast.success("Successfully deleted Listing");
+    }
+
+  }
 
 const firebaseConfig = {
     apiKey: "AIzaSyCNCQxtwDN4VTPA6WjZfooYEsbsk7Ay_V4",
@@ -23,12 +44,15 @@ const [listings, setListings] = useState(null);
   useEffect(() => {
     async function fetchDataFromFirestore() {
       try {
-        const querySnapshot = await getDocs(
-            collection(db, 'listings'));
+        const listingRef = ( collection(db, 'listings'))
         let fetchedListings = [];
-        // const q = query( collection(db, 'listings'),
-        //  where('userRef', '==', auth.currentUser.uid),
-        //   orderBy('timestamp', 'desc'));
+        const q = query(listingRef,
+         where ('useRef', '==', auth.currentUser.uid)
+         )
+
+          const querySnapshot = await getDocs(q);
+          
+          console.log(querySnapshot);
 
         
         querySnapshot.forEach((doc) => {
@@ -48,11 +72,16 @@ const [listings, setListings] = useState(null);
   }, [db]);
 
   return (
-    <div>
+    <div className='max-w-6xl px-3 mt-6 mx-auto    flex'>
     {listings ? (
       listings.map((listing) => (
         
-         <Listingitem key={listing.id} listing = {listing.data}/>           
+         <Listingitem
+          key={listing.id} 
+          listing = {listing.data}
+          onDelete = {() => onDelete(listing.id)}        
+          onEdit = {() => onEdit(listing.id)}
+          />           
                       
                
        

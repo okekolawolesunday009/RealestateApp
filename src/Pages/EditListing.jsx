@@ -6,10 +6,10 @@ import { toast } from 'react-toastify';
 import { db } from '../firebase';
 import {useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-// import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 
 
-export default function CreateListing() {
+export default function EditListing() {
   const [loading, setLoading] = useState(false);
   const auth = getAuth();
   const navigate = useNavigate();
@@ -135,7 +135,7 @@ export default function CreateListing() {
         ...formData,
         imgUrls,
         timeStamp: serverTimestamp(),
-        userRef: auth.currentUser.uid
+        useRef: auth.currentUser.uid
 
       };
       delete formDataCopy.images;
@@ -325,7 +325,7 @@ export default function CreateListing() {
           <button
            type='submit' className='w-full mt-6 mb-6 bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium rounded shadow-md hover:bg-blue-700 transition duration-150 ease-in-out active:bg-blue-800 '>
 
-               Create Listing
+               Edit Listing
           </button>
 
           
