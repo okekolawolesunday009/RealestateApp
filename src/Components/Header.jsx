@@ -15,6 +15,8 @@ export default function Header(selected) {
   const navigate = useNavigate();
   const [pageState, setPageState]= useState('Sign-in')
   const auth = getAuth();
+  const [navPanel, setNavPanel] = useState(false);
+
   useEffect(() => {
     onAuthStateChanged(auth, (user)=>{
       if(user){
@@ -39,14 +41,20 @@ export default function Header(selected) {
     function navbar(){
       console.log("clicked");
       setNavBarShow((p) => !p);
-      setShowNavx((prevState) => !prevState)
+      setShowNavx((prevState) => !prevState);
+      setNavPanel(true);
+    //   setTimeout(() => {
+    //     setNavPanel(false);
+    //     setShowNavx((prevState) => !prevState);
+    // },2500);
     //   navigate('/')
     }
 
   return (
     <div className=' bg-white border-b shadow-sm  all w-full' >
         <header className='flex justify-between px-3 py-5 items-center max-w-6xl mx-auto sticky top-0'>
-            <div className="">
+            <div className=""
+              onClick={()=> navigate("/")}>
                 <img src="https://static.rdc.moveaws.com/images/logos/rdc-logo-default.svg"
                 className='logo cursor-pointer'
                 alt='logo'/>
@@ -54,10 +62,14 @@ export default function Header(selected) {
             </div>
             {
            showNavx ?
-            (<GoThreeBars className={`threebar`} onClick={navbar}/>)
+            (<GoThreeBars  className={`threebar`} onClick={navbar}/>)
             :
             (<MdCancel  className={`threebar`} onClick={navbar}/>)
            }
+
+           
+
+          
 
             <div className='Nav' >
           
@@ -85,6 +97,7 @@ export default function Header(selected) {
                    
                 </ul>
             </div>
+          
         </header>
     </div>
   )

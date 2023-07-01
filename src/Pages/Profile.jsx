@@ -42,10 +42,7 @@ export default function Profile() {
          )
 
           const querySnapshot = await getDocs(q);
-          
-          console.log(querySnapshot);
-
-        
+               
         querySnapshot.forEach((doc) => {
           fetchedListings.push({
             id: doc.id,
@@ -158,6 +155,7 @@ export default function Profile() {
               listings.map((listing) => (
                 <Listingitem
                   key={listing.id} 
+                  id = {listing.id}
                   listing = {listing.data}
                   onDelete = {() => onDelete(listing.id)}        
                   onEdit = {() => onEdit(listing.id)}

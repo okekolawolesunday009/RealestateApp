@@ -22,7 +22,7 @@ export default function Listingitem({listing, id, onEdit, onDelete}) {
       <div className='w-full p-[10px] x'>
         <div className='flex items-center space-x-1'> 
           <MdLocationOn className='text-green-600'/>
-          <p className='font-semibold text-sm mb-[2px]text-gray-600 truncate'>lagos</p>
+          <p className='font-semibold text-sm mb-[2px]text-gray-600 truncate'>{listing.address}</p>
         </div>
         <p className='font-semibold m-0 text-xl'>{listing.description}</p>
        <p className='text-[#457b9d] mt-2 font-bold'>
