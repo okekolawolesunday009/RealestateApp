@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import house from '../Assets/imagehouse.jpg';
 import Moment from 'react-moment';
 import {MdLocationOn} from 'react-icons/md';
 import {FaTrash} from 'react-icons/fa';
@@ -17,7 +16,7 @@ export default function Listingitem({listing, id, onEdit, onDelete}) {
         src = {listing.imgUrls[0]} alt = ""/> 
         
         <Moment className='absolute top-2 left-2 bg-[#3377cc] text-white uppercase text-xs font-semi-bold rounded-md px-2 py-1 shadow-lg' fromNow>
-          {listing.timestamp?.toDate()}
+          {console.log(listing.timeStamp?.toDate())}
         </Moment>    
       <div className='w-full p-[10px] x'>
         <div className='flex items-center space-x-1'> 

@@ -7,6 +7,7 @@ import { FcHome } from 'react-icons/fc';
 import { db } from '../firebase';
 import Listingitem from '../Components/ListingItem';
 
+
 export default function Profile() {
   const [changeProfileName, setChangeProfileName] = useState(false);
   const [listings, setListings] = useState(null);
@@ -37,9 +38,8 @@ export default function Profile() {
       try {
         const listingRef = ( collection(db, 'listings'))
         let fetchedListings = [];
-        const q = query(listingRef,
-         where ('userRef', '==', auth.currentUser.uid)
-         )
+        const q = query(listingRef, where("userRef", "==", auth.currentUser.uid),
+        );
 
           const querySnapshot = await getDocs(q);
                

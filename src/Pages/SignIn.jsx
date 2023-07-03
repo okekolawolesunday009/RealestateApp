@@ -5,7 +5,7 @@ import OAUTH from '../Components/OAUTH';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import {db} from '../firebase'
+// import {db} from '../firebase'
 
 export default function SignIn() {
     const [showPassword, setShowPassword]= useState(false);
