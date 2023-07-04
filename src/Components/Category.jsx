@@ -1,19 +1,19 @@
 import { collection, getDocs, limit, orderBy, query, startAfter, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'
-import { toast } from 'react-toastify';
 import { db } from '../firebase';
 import Listingitem from '../Components/ListingItem';
+import { useParams } from 'react-router-dom';
 
-export default function Offers() {
+export default function Category() {
   const [listings, setListings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lastFetchedListing, setFetchedListings] = useState(null);
-
+  const params = useParams();
   useEffect(()=> {
     async function fetchedListings(){
       try{
         const listingRef = collection(db, "listings");
-        const q = query(listingRef, where("offer", "==", true), orderBy("timeStamp", "desc"), limit(8));
+        const q = query(listingRef, where("type", "==", params.categoryName), orderBy("timeStamp", "desc"), limit(8));
         const querySnapshot = await getDocs(q);
         const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
         setFetchedListings(lastVisible)
@@ -33,11 +33,11 @@ export default function Offers() {
    
   }
   fetchedListings();
-}, []);
+}, [params.categoryName]);
 async function moreListing(){
   try{
     const listingRef = collection(db, "listings");
-    const q = query(listingRef, where("offer", "==", true), orderBy("timeStamp", "desc"), startAfter(lastFetchedListing), limit(4));
+    const q = query(listingRef, where("type", "==", params.categoryName), orderBy("timeStamp", "desc"), startAfter(lastFetchedListing), limit(4));
     const querySnapshot = await getDocs(q);
     const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
     setFetchedListings(lastVisible)
@@ -59,7 +59,7 @@ async function moreListing(){
 }
   return (
     <div className='max-w-6xl mx-auto px-3'>
-      <h1 className='text-3xl text-center font-bold'>Offers</h1>
+      <h1 className='text-3xl mt-4 text-center font-bold'>{params.categoryName === "rent" ? "Places for rent" : "Places for sale"}</h1>
        {loading ? (
          <div className='lds-facebook spinner'><div></div><div></div><div></div></div>
 
@@ -80,7 +80,7 @@ async function moreListing(){
             </div>
         )}
         </>
-       ) : (<p>There are no current offers</p>)
+       ) : (<p>There are no current {params.categoryName === "rent" ? "rent" : " sale"}</p>)
        }
 
     </div>

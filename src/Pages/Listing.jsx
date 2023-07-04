@@ -84,7 +84,7 @@ export default function Listing() {
             <div className='h-auto lg-[400px]  '>
               <p className='text-2xl font-bold text-blue-900 mb-3 '>
                 {listing.name} - ${" "} {listing.offer
-                  ? listing.discountedPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  ? listing.discountedPrice?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                   : listing.regularPrice
                     .toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 {listing.type === "rent" ? " / month" : ""}

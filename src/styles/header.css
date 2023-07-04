@@ -1,5 +1,53 @@
-.show-active:hover,
-.show-active:focus{
-    border-bottom: 3px solid red;
 
+.show-active,
+.show-active{
+    position: relative;
+}
+.show-active::after{
+   content: '';
+   position: absolute;
+   left: 0;
+   bottom: -5px;
+   width: 100%;
+   height: 5px;
+   background: black;
+   border-radius: 5px;
+   transform-origin: right;
+   transform:  scaleX(0);
+   transition: transform .5s;
+   
+
+}
+.show-active:hover::after,
+.show-active:focus::after{
+  
+   transform-origin: left;
+   transform:  scaleX(1);
+
+
+}
+
+@media screen and (max-width: 768px){
+    .Nav{
+        /* background-color:rgb(116, 116, 231);
+        height: 200px;
+        width: 20%;
+        text-align: center;
+             
+        border-radius: 10px; */
+       
+    }
+    li{
+        /* color: white; */
+        margin-top: 20px;
+    }
+    ul{
+        text-align: center;
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+
+       
+
+    }
 }

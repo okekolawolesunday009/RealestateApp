@@ -74,7 +74,7 @@ export default function Header(selected) {
             <div className='Nav' >
           
                 <ul className={`flex lg:space-x-10 md:space-x-10 ${navBarshow ? 'option' : 'options__open'} `}>
-                       <div className='show-active' onClick={()=> navigate("/")}>
+                    <div className='show-active' onClick={()=> navigate("/")}>
                 
                         <li className={` text-lg font-bold cursor-pointer `}>Home</li>
                    </div>

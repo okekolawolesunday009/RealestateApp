@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { collection, doc, getDoc, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
+import { collection, getDocs, limit, orderBy, query} from 'firebase/firestore';
 import { db } from '../firebase';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getAuth } from 'firebase/auth';
@@ -11,8 +11,6 @@ export default function Slider() {
     
   const [listings, setListings] = useState(null);
   const [loading, setLoading] = useState(true);
-  const params = useParams();
-  const auth = getAuth();
   SwiperCore.use([Autoplay, Navigation, Pagination]);
   const navigate = useNavigate();
   useEffect(() => {
@@ -55,7 +53,7 @@ export default function Slider() {
         key ={id} 
         onClick={() => navigate(`/category/${listing.data.type}/${listing.id}`)}
         >
-        {console.log(listing)}
+        {/* {console.log(listing)} */}
 
         <div style ={{background: `url(${listing.data.imgUrls[id]}) center, no-repeat`, backgroundSize: "cover"}}
         className='w-full h-[300px]'>
