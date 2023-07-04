@@ -37,9 +37,10 @@ export default function Slider() {
 
         
   }, []);
-//   if (listings 0){
-//     return <></>
-//   }
+  if (listings === null){
+    return <></>
+  }
+  
   return listings && <>
  
   <Swiper 

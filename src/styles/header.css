@@ -27,27 +27,7 @@
 
 }
 
+
 @media screen and (max-width: 768px){
-    .Nav{
-        /* background-color:rgb(116, 116, 231);
-        height: 200px;
-        width: 20%;
-        text-align: center;
-             
-        border-radius: 10px; */
-       
-    }
-    li{
-        /* color: white; */
-        margin-top: 20px;
-    }
-    ul{
-        text-align: center;
-        margin-top: 20px;
-        display: flex;
-        justify-content: space-between;
-
-       
-
-    }
+    
 }
