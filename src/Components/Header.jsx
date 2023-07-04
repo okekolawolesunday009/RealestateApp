@@ -56,7 +56,7 @@ export default function Header(selected) {
     };
 
   return (
-    <div className=' bg-white border-b shadow-sm  all w-full' >
+    <div className=' fixed z-50 bg-white border-b shadow-sm  all w-full' >
         <header className='flex justify-between px-3 py-5 items-center max-w-6xl mx-auto sticky top-0'>
             <div className=""
               onClick={()=> navigate("/")}>
