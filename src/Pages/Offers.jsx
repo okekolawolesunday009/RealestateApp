@@ -25,6 +25,7 @@ export default function Offers() {
           });
         });
         setListings(listings);
+       
         setLoading(false);
       } catch(error){
         console.error('Error fetching data from Firestore:', error);
@@ -34,6 +35,7 @@ export default function Offers() {
   }
   fetchedListings();
 }, []);
+console.log(listings)
 async function moreListing(){
   try{
     const listingRef = collection(db, "listings");
@@ -59,7 +61,7 @@ async function moreListing(){
 }
   return (
     <div className='max-w-6xl mx-auto px-3'>
-      <h1 className='text-3xl text-center font-bold'>Offers</h1>
+      <h1 className='text-3xl text-center pt-[100px] font-bold'>Offers</h1>
        {loading ? (
          <div className='lds-facebook spinner'><div></div><div></div><div></div></div>
 

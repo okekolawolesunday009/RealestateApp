@@ -106,7 +106,7 @@ export default function Profile() {
     
   return (
     <>
-    <section className='max-w-xl mx-auto flex justify-center flex-col'>
+    <section className='max-w-xl mx-auto pt-[100px] flex justify-center flex-col'>
         <h1 className='text-3xl mt-6 font-bold text-center'>Profile </h1>
     <form action="" className='w-full md:w[50%] mt-6 px-3 flex gap-4 flex-col'>
           <input

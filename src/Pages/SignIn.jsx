@@ -37,7 +37,7 @@ export default function SignIn() {
 
   return (
     <section>
-        <h1 className='text-4xl text-center mt-6 font-bold'>Sign In</h1>
+        <h1 className='text-4xl pt-[100px]  text-center  font-bold'>Sign In</h1>
         <div className='flex justify-center flex-wrap gap-5 items-center px-6 py-12 max-6xl'>
            <div className='lg:w-[40%] md-12 md: md-6 ' >
                 <img src="https://images.unsplash.com/flagged/photo-1564767609342-620cb19b2357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8a2V5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" alt="key" 

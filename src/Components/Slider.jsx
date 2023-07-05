@@ -56,7 +56,7 @@ export default function Slider() {
         >
         {/* {console.log(listing)} */}
 
-        <div style ={{background: `url(${listing.data.imgUrls[id]}) center, no-repeat`, backgroundSize: "cover"}}
+        <div style ={{background: `url(${listing.data.imgUrls[0]}) center, no-repeat`, backgroundSize: "cover"}}
         className='w-full h-[300px]'>
            
         </div>

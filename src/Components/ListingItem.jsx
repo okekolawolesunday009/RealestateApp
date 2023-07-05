@@ -25,7 +25,7 @@ export default function Listingitem({listing, id, onEdit, onDelete}) {
         <p className='font-semibold m-0 text-xl'>{listing.description}</p>
        <p className='text-[#457b9d] mt-2 font-bold'>
         $
-        {listing.offer ? 
+        {listing.offer ?  
           listing.discountedPrice?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
           :
         

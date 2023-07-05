@@ -157,7 +157,7 @@ export default function CreateListing() {
     
     
   return (
-   <main className='px-6 mx-auto lg:max-w-lg'>
+   <main className='px-6 pt-[100px] mx-auto lg:max-w-lg'>
     <h1 className="text-3xl text-center mt-6 font-bold" >
         Create a Listing </h1>
        
@@ -278,31 +278,38 @@ export default function CreateListing() {
            <div className='flex  gap-2 mt-6'>
                <div className=' flex flex-col gap-4'>
                <label className='text-lg font-medium'> Regular Price</label>
+               <div className='flex space-x-4 items-center'>
                <input type="number" name="regularPrice" id="regularPrice" 
                onChange={onChange}
                value={regularPrice}
                className='text-center shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-[50%] rounded-sm' maxLength={43000000} minLength={10}  />
-               </div>
-               <div>
+             
+             
                 {type === "rent" && (<p>$/Month</p>)}
+                </div>
                </div>
           </div>
           <div className='flex  items-center'>
-          {!offer && (
+          {offer && (
           <div className='flex flex-col gap-2 mt-6'>
                <label className='text-lg font-medium'> Discount Price</label>
+               <div className='flex space-x-4 items-center'>
                <input type="number" name="discountPrice" id="discountPrice" 
                onChange={onChange}
                required ={offer}
                value={discountPrice}
                className='text-center shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-[50%] rounded-sm' maxLength={430} minLength={10}  />
+
+
+                {type === "rent" && (<p>$/Month</p>)}
+                </div>
           </div>
               
 
            )}
            
                <div>
-               {type === "rent" && (<p>$/Month</p>)}
+              
               </div>
 
             </div>
