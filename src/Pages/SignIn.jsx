@@ -8,6 +8,7 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 // import {db} from '../firebase'
 
 export default function SignIn() {
+    const [loading, setLoading] = useState(false)
     const [showPassword, setShowPassword]= useState(false);
     const [formData , setFormData ] = useState({
         email:"",
@@ -22,6 +23,7 @@ export default function SignIn() {
         }))
     }
     async function handleSubmit (e){
+        setLoading(true);
         e.preventDefault()
         try {
             const auth = getAuth();
@@ -33,6 +35,7 @@ export default function SignIn() {
         } catch (error) {
             toast.error('Bad Creditation')
         }
+        setLoading(false)
     }
 
   return (
@@ -50,6 +53,7 @@ export default function SignIn() {
                     <input
                      className='text-xl text-gray-700 w-full h-11 rounded-xl px-4 py-2  border-gray-300 transition ease-in-out'
                      value={email}
+                     required
                      onChange={handleChange}
                      type="email"
                      placeholder='Email' 
@@ -61,6 +65,7 @@ export default function SignIn() {
                         <input 
                         className='text-xl text-gray-700 w-full h-11 rounded-xl px-4 py-2  border-gray-300 transition ease-in-out'
                         value={password}
+                        required
                         onChange={handleChange}
                         type={showPassword ? "text" : "password" }
                         placeholder='Password'
@@ -90,7 +95,15 @@ export default function SignIn() {
                         
                        </div>
                     </div>
-                    <input className='w-full h-11 bg-blue-600 text-white text-sm font-semibold  rounded-md hover:bg-blue-700 active:bg-blue-800 transition duration-150 ease-in-out ' type="submit" value="SIGN IN" name="" id="" />
+                    <div className='relative'>
+                    <input className='w-full h-11 bg-blue-600 text-white text-xl font-semibold  rounded-md hover:bg-blue-700 active:bg-blue-800 transition duration-150 ease-in-out ' type="submit" value="SIGN IN" name="" id="" />
+                    {loading && (
+                       
+                            <div className='lds-facebook spinnersign !absolute mt-[-20px] !bottom:[18%] !right-[-0%]'><div className='!bg-white'></div><div className='!bg-white'></div><div className='!bg-white'></div></div>
+                      
+                        
+                    )}
+                    </div>
                     <div className='flex items-center before:border-t before:flex-1 before:border-gray-300 after:border-t after:flex-1 after:border-gray-300 '>
                         <p className='font-semibold text-center'>OR</p>
                     </div>

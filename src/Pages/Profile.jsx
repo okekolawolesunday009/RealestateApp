@@ -149,8 +149,9 @@ export default function Profile() {
 
      {listings !== null && !loading && (
       <>
-       <h2 className='text-center font-semibold text-2xl'>My listing</h2>
+      
        <ul className='sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl-grid-cols-5 mt-6 mb-6 '>
+       <h2 className='text-center font-semibold text-2xl'>My listing</h2>
             {listings ? (
               listings.map((listing) => (
                 <Listingitem

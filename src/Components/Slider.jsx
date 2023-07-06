@@ -62,7 +62,10 @@ export default function Slider() {
         </div>
         <p className='shadow-lg opacity-90 p-2 bg-[#457b9d] mx-w-[90%] rounded-br-3xl text-[#f1faee] absolute left-1 top-3  font-semibold '>{listing.data.name}</p>
         {/* //if not null ?? */}
-        <p className='shadow-lg opacity-90 p-2 bg-[#e63946] mx-w-[90%] rounded-br-3xl text-[#f1faee] absolute left-1 bottom-8 font-medium '>{listing.data.discountedPrice ?? listing.data.regularPrice}
+        <p className='shadow-lg opacity-90 p-2 bg-[#e63946] mx-w-[90%] rounded-br-3xl text-[#f1faee] absolute left-1 bottom-8 font-medium '>
+          ${listing.data.discountedPrice?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          ?? listing.data.regularPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          }
         {listing.data.type === "rent" && " / month"}</p>
          
 

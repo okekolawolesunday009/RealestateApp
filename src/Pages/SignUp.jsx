@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 export default function SignUp() {
 
+    const [loading, setLoading] = useState(false)
     const [showPassword, setShowPassword]= useState(false);
     const [formData , setFormData ] = useState({
         fname: "",
@@ -27,6 +28,7 @@ export default function SignUp() {
     async function onSubmit(e){
         e.preventDefault()
         try {
+            setLoading(true);
                 const auth = getAuth();
                 const userCredential = await createUserWithEmailAndPassword(
                     auth,
@@ -56,15 +58,17 @@ export default function SignUp() {
         } catch (error) {
     
             // toast.error("Something went wrong with the registration")
-            console.log(error)
+            console.error(error);
             
         }
+        setLoading(false);
+
 
 
     }
   return (
     <section>
-        <h1 className='text-4xl text-center mt-6 font-bold'>Sign Up</h1>
+        <h1 className='text-4xl text-center pt-[100px] font-bold'>Sign Up</h1>
         <div className='flex justify-center flex-wrap gap-5 items-center px-6 py-12 max-6xl'>
              <div className='lg:w-[40%] md-12 md: md-6 ' >
                 <img src="https://images.unsplash.com/flagged/photo-1564767609342-620cb19b2357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8a2V5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60" alt="key" 
@@ -78,6 +82,7 @@ export default function SignUp() {
                     className='text-xl text-gray-700 w-full h-11 rounded-xl px-4 py-2  border-gray-300 transition ease-in-out'
                     placeholder='Full Name'
                     value={fname}
+                    required
                     onChange={handleChange} name="fname" id="fname" />
                     </div>
                   
@@ -86,6 +91,7 @@ export default function SignUp() {
                     <input
                      className='text-xl text-gray-700 w-full h-11 rounded-xl px-4 py-2  border-gray-300 transition ease-in-out'
                      value={email}
+                     required
                      onChange={handleChange}
                       type="email"
                        placeholder='Email' 
@@ -101,6 +107,7 @@ export default function SignUp() {
                         onChange={handleChange}
                         type={showPassword ? "text" : "password" }
                         placeholder='Password'
+                        required
                         name="password" id="password" />
 
                         {showPassword ?
@@ -128,8 +135,15 @@ export default function SignUp() {
                         
                        </div>
                       </div>
-                   
+                     <div className='relative'>
                     <input className='w-full h-11 bg-blue-600 text-white text-xl font-semibold  rounded-md' type="submit" value="SIGN UP" name="" id="" />
+                    {loading && (
+                       
+                       <div className='lds-facebook spinnersign !absolute mt-[-20px] !bottom:[18%] !right-[-0%]'><div className='!bg-white'></div><div className='!bg-white'></div><div className='!bg-white'></div></div>
+                 
+                   
+                     )}
+                     </div>
                    
                     <div className='font-semibold text-center'>
                         OR

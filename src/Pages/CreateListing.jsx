@@ -143,7 +143,8 @@ export default function CreateListing() {
       const docRef = await addDoc(collection(db, "listings"), formDataCopy);
       setLoading(false);
       toast.success("listing created");
-      navigate(`category/${formDataCopy.type}/${docRef.id}`);
+      // navigate(`category/${formDataCopy.type}/${docRef.id}`);
+      window.location.href = '/profile';
     }
 
 
@@ -282,6 +283,7 @@ export default function CreateListing() {
                <input type="number" name="regularPrice" id="regularPrice" 
                onChange={onChange}
                value={regularPrice}
+               required
                className='text-center shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease w-[50%] rounded-sm' maxLength={43000000} minLength={10}  />
              
              
